@@ -11,6 +11,7 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
         * Email
         * Mot de passe
         * Statut
+        * Accord RGPD (facultatif)
         * Vote question (bonus)
         * Vote réponse (bonus)
     + Questions
@@ -26,9 +27,10 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
         * Validation
         * Statut
         * Question
-    + Catégorie
+    + Catégorie 
         * Intitulé
         * Statut 
+        * Question(s)
 
 ## Fonctionnalités attendues
 
@@ -69,8 +71,10 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
 | `/login` | `GET` | `SecurityController` | `login` | Connexion | Formulaire de connexion | Visiteur |
 | `/logout` | `GET` | `SecurityController` | `-` | Déconnexion | - | Utilisateur et +, pas de méthode, gestion via route et security.yaml |
 |--|--|--|--|--|--|--|
+| `/signin` | `GET & POST` | `UserController` | `signin` | Inscription | Formulaire d'inscription | Visiteur |
 | `/account` | `GET` | `UserController` | `account` | Mon profil - afficher | Consulter ses propres informations utilisateur, la liste de ses questions, et de ses réponses | Utilisateur et + |
 | `/account/edit` | `GET & POST` | `UserController` | `edit` | Mon profil - modifier | Formulaire pour modifier ses propres informations utilisateur, la liste de ses questions, et de ses réponses | Utilisateur et + |
+| `/backend/information` | `get` | `UserController` | `information` | Charte d'utilisation | Charte du site | Utilisateur et + |
 |--|--|--|--|--|--|--|
 | `/backend/tag` | `GET` | `Backend\TagController` | `index` | Catégories - lister | Liste des catégories | Modérateur et + |
 | `/backend/tag/{id}` | `GET & POST` | `Backend\TagController` | `edit` | Catégories - modifier | Formulaire pour modifier une catégorie | Modérateur et + |
