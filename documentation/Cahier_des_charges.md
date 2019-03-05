@@ -7,36 +7,36 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
 ## Entités principales
 
     + Utilisateurs
-        * Nom d'utilisateur
-        * Avatar
-        * Role
-        * Email
-        * Présentation
-        * Mot de passe
-        * Statut
+        * Nom d'utilisateur -> username
+        * Avatar -> image
+        * Role -> role
+        * Email -> email
+        * Présentation -> description
+        * Mot de passe -> password
+        * Statut -> isActive
         * Accord RGPD (facultatif)
         * Vote question (bonus)
         * Vote réponse (bonus)
     + Questions
-        * Auteur/Utilisateur
-        * Intitulé
-        * Corps de la question
-        * Date
-        * Statut
-        * Catégorie(s)
+        * Auteur/Utilisateur ->user
+        * Intitulé ->title
+        * Corps de la question ->body
+        * Date ->createdAt
+        * Statut ->isActive
+        * Catégorie(s) -> tags
     + Réponses (plusieurs possibles par question)
-        * Auteur/Utilisateur
-        * Corps de la réponse
-        * Date
-        * Validation
-        * Statut
-        * Question
-    + Catégorie 
-        * Intitulé
-        * Description
-        * Image
-        * Statut 
-        * Question(s)
+        * Auteur/Utilisateur ->user
+        * Corps de la réponse ->body
+        * Date ->createdAt
+        * Validation -> isValid
+        * Statut -> isActive
+        * Question -> question
+    + Catégorie
+        * Intitulé -> name
+        * Description -> description
+        * Image -> image
+        * Statut -> isActive
+        * Question(s) -> questions
 
 ## Fonctionnalités attendues
 
@@ -65,14 +65,14 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
 | `/question/tag/{id}` | `GET` | `QuestionController` | `indexByTag` | Questions par tag | Voir toutes les questions (les plus récentes d'abord) liées à un tag défini | Visiteur et + |
 | `/question/new` | `GET & POST` | `QuestionController` | `new` | Question - ajouter | Formulaire pour ajouter une question et définir des tags | Utilisateur et + |
 | `/question/{id}/show` | `GET` | `QuestionController` | `show` | Question - afficher | Voir la question, avec toutes ses réponses et les tags associés | Visiteur et + |
-| `/question/{id}` | `GET & POST` | `QuestionController` | `edit` | Question - modifier | Formulaire pour gérer ou modifier une question | Utilisateur et + |
+<!-- | `/question/{id}` | `GET & POST` | `QuestionController` | `edit` | Question - modifier | Formulaire pour gérer ou modifier une question | Utilisateur et + | -->
 | `/question/{id}` | `PUT` | `QuestionController` | `editStatus` | Question - modifier le statut | Lien du bouton pour bloquer ou débloquer une question | Modérateur et + |
-| `/question/{id}` | `DELETE` | `QuestionController` | `delete` | Question - supprimer | Lienpour supprimer une question | Utilisateur et + |
+<!-- | `/question/{id}` | `DELETE` | `QuestionController` | `delete` | Question - supprimer | Lienpour supprimer une question | Utilisateur et + -->
 |--|--|--|--|--|--|--|
 | `/question/{id}/answer/new` | `POST` | `AnswerController` | `new` | Réponse - ajouter | Formulaire pour ajouter une réponse à une question | Utilisateur et + |
-| `/question/{id}/answer/{id}` | `GET & POST` | `AnswerController` | `edit` | Réponse - modifier | Formulaire pour gérer ou modifier une réponse | Utilisateur et + |
+<!-- | `/question/{id}/answer/{id}` | `GET & POST` | `AnswerController` | `edit` | Réponse - modifier | Formulaire pour gérer ou modifier une réponse | Utilisateur et + | -->
 | `/question/{id}/answer/{id}` | `PUT` | `AnswerController` | `editStatus` | Réponse - modifier le statut | Lien du bouton pour bloquer ou débloquer une réponse | Modérateur et + |
-| `/question/{id}/answer/{id}` | `DELETE` | `AnswerController` | `delete` | Réponse - supprimer | Lien pour supprimer une réponse | Utilisateur et + |
+<!-- | `/question/{id}/answer/{id}` | `DELETE` | `AnswerController` | `delete` | Réponse - supprimer | Lien pour supprimer une réponse | Utilisateur et + | -->
 |--|--|--|--|--|--|--|
 | `/login` | `GET` | `SecurityController` | `login` | Connexion | Formulaire de connexion | Visiteur |
 | `/logout` | `GET` | `SecurityController` | `-` | Déconnexion | - | Utilisateur et +, pas de méthode, gestion via route et security.yaml |
