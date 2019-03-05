@@ -9,8 +9,17 @@
     + Création du MCD
     + Création du trello avec user stories et organisation perso
 
-
 ### Difficultés :
 
     - Logique des noms et méthodes des routes
     - Point le plus complet avant d'attaquer le code
+
+## 05/03/2019
+
+### Avancées :
+
+    + Création des entités via maker et code
+
+### Difficultés :
+
+    - Choix de champs pour fonctionnalités potentielles (images, slug)

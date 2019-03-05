@@ -7,13 +7,13 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
 ## Entités principales
 
     + Utilisateurs
-        * Nom d'utilisateur
-        * Avatar
+        * Nom d'utilisateur -> username
+        * Avatar -> image
         * Role
-        * Email
-        * Présentation
-        * Mot de passe
-        * Statut
+        * Email -> email
+        * Présentation -> description
+        * Mot de passe -> password
+        * Statut -> isActive
         * Accord RGPD (facultatif)
         * Vote question (bonus)
         * Vote réponse (bonus)
@@ -31,11 +31,11 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
         * Validation
         * Statut
         * Question
-    + Catégorie 
+    + Catégorie
         * Intitulé
         * Description
         * Image
-        * Statut 
+        * Statut
         * Question(s)
 
 ## Fonctionnalités attendues
