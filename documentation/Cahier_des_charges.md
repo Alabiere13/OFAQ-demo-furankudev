@@ -8,7 +8,10 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
 
     + Utilisateurs
         * Nom d'utilisateur
+        * Avatar
+        * Role
         * Email
+        * Présentation
         * Mot de passe
         * Statut
         * Accord RGPD (facultatif)
@@ -20,6 +23,7 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
         * Corps de la question
         * Date
         * Statut
+        * Catégorie(s)
     + Réponses (plusieurs possibles par question)
         * Auteur/Utilisateur
         * Corps de la réponse
@@ -29,6 +33,8 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
         * Question
     + Catégorie 
         * Intitulé
+        * Description
+        * Image
         * Statut 
         * Question(s)
 
