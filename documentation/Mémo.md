@@ -21,6 +21,7 @@
     + Création des entités via maker et code
     + Paramètrage du .env et création de la BDD
     + Migrations
+    + QuestionController et routes
 
 ### Difficultés :
 

@@ -2,18 +2,30 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Answer;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/** 
+ *  @Route("/answer", name="answer_") 
+*/
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/answer", name="answer")
+     * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function index()
+    public function new()
     {
-        return $this->render('answer/index.html.twig', [
-            'controller_name' => 'AnswerController',
+        return $this->render('answer/new.html.twig', [
+            'page_title' => 'Ajouter une nouvelle question',
         ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="editStatus", methods={"PUT"}, requirements={"id"="\d+"})
+     */
+    public function editStatus(Answer $answer)
+    {
+        return RedirectToRoute('question_index');
     }
 }

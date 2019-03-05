@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Entity\Question;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -22,11 +23,11 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/question/tag/{id}", name="indexByTag", methods={"GET"})
+     * @Route("/question/tag/{id}/index", name="indexByTag", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function indexByTag(Tag $tag)
     {
-        return $this->render('question/index.html.twig', [
+        return $this->render('question/index_by_tag.html.twig', [
             'page_title' => 'Catégorie - ' . $tag->getName(),
         ]);
     }
@@ -36,28 +37,26 @@ class QuestionController extends AbstractController
      */
     public function new()
     {
-        return $this->render('question/index.html.twig', [
+        return $this->render('question/new.html.twig', [
             'page_title' => 'Ajouter une nouvelle question',
         ]);
     }
 
     /**
-     * @Route("/question/{id}", name="show", methods={"GET"})
+     * @Route("/question/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Question $question)
     {
-        return $this->render('question/index.html.twig', [
+        return $this->render('question/show.html.twig', [
             'page_title' => 'Question - ' . $question->getTitle(),
         ]);
     }
 
     /**
-     * @Route("/question/{id}", name="editStatus", methods={"PUT"})
+     * @Route("/question/{id}/edit", name="editStatus", methods={"PUT"}, requirements={"id"="\d+"})
      */
     public function editStatus(Question $question)
     {
-        return $this->render('question/index.html.twig', [
-            'page_title' => 'Question - ' . $question->getTitle(),
-        ]);
+        return RedirectToRoute('question_index');
     }
 }
