@@ -19,7 +19,10 @@
 ### Avancées :
 
     + Création des entités via maker et code
+    + Paramètrage du .env et création de la BDD
+    + Migrations
 
 ### Difficultés :
 
     - Choix de champs pour fonctionnalités potentielles (images, slug)
+    - Anticiper les éléments à traiter dans le construct des entités

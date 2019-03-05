@@ -60,12 +60,18 @@ class Question
      */
     private $tags;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question")
+     */
+    private $answers;
+
     public function __construct()
     {
         $this->viewsCounter = 0;
         $this->isActive = true;
         $this->createdAt = new DateTime();
         $this->tags = new ArrayCollection();
+        $this->answers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +184,37 @@ class Question
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Answer[]
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    public function addAnswer(Answer $answer): self
+    {
+        if (!$this->answers->contains($answer)) {
+            $this->answers[] = $answer;
+            $answer->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswer(Answer $answer): self
+    {
+        if ($this->answers->contains($answer)) {
+            $this->answers->removeElement($answer);
+            // set the owning side to null (unless already changed)
+            if ($answer->getQuestion() === $this) {
+                $answer->setQuestion(null);
+            }
         }
 
         return $this;

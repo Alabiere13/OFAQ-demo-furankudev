@@ -9,7 +9,7 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
     + Utilisateurs
         * Nom d'utilisateur -> username
         * Avatar -> image
-        * Role
+        * Role -> role
         * Email -> email
         * Présentation -> description
         * Mot de passe -> password
@@ -18,19 +18,19 @@ Développer un site de questions/réponses sur le modèle de Quora, ou encore St
         * Vote question (bonus)
         * Vote réponse (bonus)
     + Questions
-        * Auteur/Utilisateur
-        * Intitulé
-        * Corps de la question
-        * Date
-        * Statut
-        * Catégorie(s)
+        * Auteur/Utilisateur ->user
+        * Intitulé ->title
+        * Corps de la question ->body
+        * Date ->createdAt
+        * Statut ->isActive
+        * Catégorie(s) -> tags
     + Réponses (plusieurs possibles par question)
-        * Auteur/Utilisateur
-        * Corps de la réponse
-        * Date
-        * Validation
-        * Statut
-        * Question
+        * Auteur/Utilisateur ->user
+        * Corps de la réponse ->body
+        * Date ->createdAt
+        * Validation -> isValid
+        * Statut -> isActive
+        * Question ->
     + Catégorie
         * Intitulé
         * Description
