@@ -19,6 +19,17 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
+    public function findAllActiveOrderedByMostRecentlyAdded()
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.isActive = true')
+            ->orderBy('q.createdAt', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Question[] Returns an array of Question objects
     //  */
