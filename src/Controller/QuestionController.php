@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tag;
 use App\Entity\Question;
+use App\Repository\TagRepository;
 use App\Repository\QuestionRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,12 +17,14 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(QuestionRepository $questionRepo)
+    public function index(QuestionRepository $questionRepo, TagRepository $tagRepo)
     {
         $questions = $questionRepo->findAllActiveOrderedByMostRecentlyAdded();
+        $tags = $tagRepo->findAll();
         return $this->render('question/index.html.twig', [
             'page_title' => 'Les questions des utilisateurs',
-            'question_list' => $questions
+            'questions' => $questions,
+            'tags' => $tags
         ]);
     }
 

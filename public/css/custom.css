@@ -1,0 +1,11 @@
+.tag-image {
+    width: 30px;
+    height: 30px;
+    border-radius:25%
+}
+
+.avatar-image {
+    width: 20px;
+    height: 20px;
+    border-radius:100%
+}
