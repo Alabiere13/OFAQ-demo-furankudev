@@ -10,6 +10,7 @@ use App\Entity\Question;
 
 use Faker\ORM\Doctrine\Populator;
 use App\DataFixtures\Faker\TagProvider;
+use App\DataFixtures\Faker\UserProvider;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -27,6 +28,7 @@ class AppFixtures extends Fixture
     {
         $generator = Factory::create('fr_FR');
         $generator->addProvider(new TagProvider($generator));
+        $generator->addProvider(new UserProvider($generator));
         $generator->seed(1234);
         $populator = new Populator($generator, $manager);
 
@@ -84,8 +86,8 @@ class AppFixtures extends Fixture
         $user->setPassword($encodedPassword);
         $manager->persist($user);
 
-        $populator->addEntity('App\Entity\User', 20, array(
-            'username' => function() use ($generator) { return $generator->unique()->name(); },
+        $populator->addEntity('App\Entity\User', 25, array(
+            'username' => function() use ($generator) { return $generator->unique()->randomSWUsername(); },
             'description' => function() use ($generator) { return $generator->paragraph(); },
             'email' => function() use ($generator) { return $generator->unique()->email(); },
             'image' => function() use ($generator) { return $generator->imageUrl($width = 640, $height = 480); },
