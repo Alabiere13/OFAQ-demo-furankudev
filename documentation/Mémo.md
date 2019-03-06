@@ -44,6 +44,14 @@
     + Installation thème Boostrap
     + Appel API dans Provider/Faker pour usernames de User
     + Template de base avec et sans sidebar
+    + Template question index
+    + Template question show
+    + Affichage liste questions
+    + Affichage question avec ses réponses
+    + Toggle isValid sur Answer
+    + Ajout fixtures pour table pivot Question-Catégorie
+    + Affichage liste catégories
+    + Affichage catégories d'une question
 
 ### Difficultés :
 

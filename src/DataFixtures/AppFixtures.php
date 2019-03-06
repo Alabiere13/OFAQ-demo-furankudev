@@ -129,6 +129,15 @@ class AppFixtures extends Fixture
 
         $inserted = $populator->execute();
 
+        $questions = $inserted['App\Entity\Question'];
+        $tags = $inserted['App\Entity\Tag'];
+        foreach ($questions as $question) {
+            shuffle($tags);
+            $question->addTag($tags[0]);
+            $question->addTag($tags[1]);
+            $manager->persist($question);
+        }
+
         $manager->flush();
     }
 }

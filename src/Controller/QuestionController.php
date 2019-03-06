@@ -8,6 +8,7 @@ use App\Repository\TagRepository;
 use App\Repository\QuestionRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 
 /** 
  *  @Route("", name="question_") 
@@ -51,15 +52,19 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Question $question)
+    public function show(Question $question, EntityManagerInterface $entityManager)
     {
+        $question->setViewsCounter($question->getViewsCounter() + 1);
+        $entityManager->flush();
+
         return $this->render('question/show.html.twig', [
             'page_title' => 'Question - ' . $question->getTitle(),
+            'question' => $question
         ]);
     }
 
     /**
-     * @Route("/question/{id}/edit", name="editStatus", methods={"PUT"}, requirements={"id"="\d+"})
+     * @Route("/question/{id}/edit", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editStatus(Question $question)
     {

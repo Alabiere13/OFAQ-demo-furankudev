@@ -3,5 +3,48 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block main %}
-    <h2>Question</h2>
+    <div class="jumbotron">
+        <h2 class="text-center display-3">{{ question.title }}</h2>
+        <p class="text-center lead">Par 
+                            <span class="font-weight-bold">
+                                <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
+                                &nbsp;{{ question.user.username }} 
+                            </span> 
+                        le&nbsp;{{ question.createdAt |date("m/d/Y") }} </p>
+        <hr class="my-4">
+        <div class="d-flex justify-content-center">
+            {% for tag in question.tags %}
+                <span class="badge badge-pill badge-info">{{ tag.name }}</span> &nbsp;
+            {% endfor %}
+        </div>
+        <hr class="my-4">
+        <p class="text-center">{{ question.body }}</p>
+        <hr class="my-4">
+        <div class="list-group">
+            {% for answer in question.answers %}
+                {% if answer.isValid == true %}
+                    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <span class="w-100 m-2 text-center badge badge-primary">-- Réponse validée par l'auteur --</span>
+                {% else %}
+                    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                {% endif %}
+                        <div class="d-flex{ w-100 justify-content-between">
+                            <h5 class="mb-1"> {{ answer.title }} </h5>
+                            <small>Par 
+                                <span class="font-weight-bold">
+                                    <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
+                                    &nbsp;{{ question.user.username }} </span> le&nbsp;{{ answer.createdAt |date("m/d/Y") }}
+                                
+                            </small>
+                        </div>
+                        <hr class="m-1">
+                        <p class="mb-1 text-italic">{{ answer.body }}</p>
+                        <div class="p-2 m-auto text-center">
+                            {% include 'question/_edit_validation_form.html.twig' %}
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
+

@@ -32,12 +32,19 @@
                             </span> 
                         le {{ question.createdAt |date("m/d/Y") }} </p>
                     </button>
+                    <div class="d-flex flex-wrap justify-content-center">
+                        {% for tag in question.tags %}
+                            <button type="button" class="btn btn-link">{{ tag.name }}</button>
+                        {% endfor %}
+                    </div>
                 </h3>
                 </div>
                 <div id="collapse{{ question.id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="heading{{ question.id }}" data-parent="#accordion">
                     <div class="card-body">
                         {{ question.body|truncate(300) }}
-                        <a href="{{ path('question_show', {id: question.id })}}"><button type="button" class="btn btn-link">Lire la suite</button></a>
+                        <p class="lead text-center mt-2">
+                            <a class="btn btn-primary btn-lg " href="{{ path('question_show', {id: question.id })}}" role="button">Lire la suite</a>
+                        </p>
                     </div>
                 </div>
             </div>

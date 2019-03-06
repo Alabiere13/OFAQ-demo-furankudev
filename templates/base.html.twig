@@ -17,8 +17,8 @@
     <body>
         <div class="container">
             <header>
-                {% include 'partial/_nav.html.twig' %}
                 {% block header %}
+                    {% include 'partial/_nav.html.twig' %}
                 {% endblock %}
             </header>
             <main>
@@ -29,17 +29,16 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
-                <div class="row">
-                    {% block main %}
-                    {% endblock %}
-                </div>
+                
+                {% block main %}
+                {% endblock %}
             </main>
             <footer>
                 {% block footer %}
+                    <div class="row">
+                        <p class="w-100 p-3 text-center text-italic">o'FAQ by Franck Tanuki @2019</p>
+                    </div>
                 {% endblock %}
-                <div class="row">
-                    <p class="w-100 p-3 text-center text-italic">o'FAQ by Franck Tanuki @2019</p>
-                </div>
             </footer>
         </div>
         {# BOOTSTRAP JS #}
