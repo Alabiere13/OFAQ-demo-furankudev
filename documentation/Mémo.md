@@ -36,3 +36,15 @@
 
     - Choix de champs pour fonctionnalités potentielles (images, slug)
     - Anticiper les éléments à traiter dans le construct des entités
+
+## 06/03/2019
+
+### Avancées :
+
+    + Installation thème Boostrap
+    + Appel API dans Provider/Faker pour usernames de User
+    + Template de base avec et sans sidebar
+
+### Difficultés :
+
+    - Oubli de make:user au lieu de make:entity pour User, régulation à la main

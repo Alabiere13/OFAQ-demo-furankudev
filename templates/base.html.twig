@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         {# FONTAWESOME #}
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        {# THEME #}
+        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
         {% block stylesheets %}{% endblock %}
     </head>
 
@@ -18,12 +20,24 @@
                 {% endblock %}
             </header>
             <main>
-                {% block main %}
-                {% endblock %}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                <div class="row">
+                    {% block main %}
+                    {% endblock %}
+                </div>
             </main>
             <footer>
                 {% block footer %}
                 {% endblock %}
+                <div class="row">
+                    
+                </div>
             </footer>
         </div>
         {# BOOTSTRAP JS #}
