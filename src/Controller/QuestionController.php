@@ -3,12 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Entity\Answer;
 use App\Entity\Question;
+use App\Form\AnswerType;
+use App\Form\QuestionType;
 use App\Repository\TagRepository;
+use App\Repository\UserRepository;
 use App\Repository\QuestionRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\EntityManagerInterface;
 
 /** 
  *  @Route("", name="question_") 
@@ -45,24 +50,63 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/new", name="new", methods={"GET", "POST"})
      */
-    public function new()
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo)
     {
+        $question = new Question();
+        $form = $this->createForm(QuestionType::class, $question);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $question->setUser($user);
+            $entityManager->persist($question);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                $user->getUsername() . ', votre question a bien été ajoutée !'
+            );
+
+            return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        }
+
         return $this->render('question/new.html.twig', [
             'page_title' => 'Ajouter une nouvelle question',
+            'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/question/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/question/{id}", name="show", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function show(Question $question, EntityManagerInterface $entityManager)
+    public function show(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, Question $question)
     {
         $question->setViewsCounter($question->getViewsCounter() + 1);
         $entityManager->flush();
 
+        $answer = new Answer();
+        $form = $this->createForm(AnswerType::class, $answer);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $answer->setUser($user);
+            $answer->setQuestion($question);
+            $entityManager->persist($answer);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                $user->getUsername() . ', votre réponse a bien été ajoutée !'
+            );
+
+            return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        }
+
         return $this->render('question/show.html.twig', [
             'page_title' => 'Question - ' . $question->getTitle(),
-            'question' => $question
+            'question' => $question,
+            'form' => $form->createView()
         ]);
     }
 
