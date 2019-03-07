@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-header" id="heading{{ question.id }}">
+        <h3 class="mb-0 d-flex">
+            <div>
+                <span class="mt-3 badge badge-info badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
+            </div>
+            <button class="btn w-100 btn-link {% if not loop.first %}collapsed{% endif %}" data-toggle="collapse" data-target="#collapse{{ question.id }}" aria-expanded="false" aria-controls="collapse{{ question.id }}">
+                <h4 class="h4 font-weight-bold text-center">{{ question.title }}</h4>
+                <p class="h6 text-italic text-center">Par 
+                    <span class="font-weight-bold">
+                        <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
+                        &nbsp;{{ question.user.username }} 
+                    </span> 
+                le {{ question.createdAt |date("d/m/Y") }} </p>
+            </button>
+            <div class="d-flex flex-wrap justify-content-center">
+                {% for tag in question.tags %}
+                    <button type="button" class="btn btn-link"><a href="{{ path('question_indexByTag', {id: tag.id })}}" class="link">
+                    {{ tag.name }}
+                </a></button>
+                {% endfor %}
+            </div>
+        </h3>
+    </div>
+    <div id="collapse{{ question.id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="heading{{ question.id }}" data-parent="#accordion">
+        <div class="card-body">
+            {{ question.body|truncate(300) }}
+            <p class="lead text-center mt-2">
+                <a class="btn btn-primary btn-lg " href="{{ path('question_show', {id: question.id })}}" role="button">Lire la suite</a>
+            </p>
+        </div>
+    </div>
+</div>

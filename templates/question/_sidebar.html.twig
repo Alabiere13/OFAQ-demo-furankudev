@@ -1,0 +1,10 @@
+<h2 class="h3">Catégories</h2>
+<div class="list-group">
+    {% for tag in tags %}
+        <a href="{{ path('question_indexByTag', {id: tag.id })}}" class="list-group-item list-group-item-action d-flex justify-content-between" >
+            <img class="tag-image" src="{{ tag.image }}" alt="tag{{ tag.id }}">&nbsp;{{ tag.name }}
+            <span class="h4 badge badge-dark badge-pill">{{ tag.questions |length }}</span>
+        </a>
+        
+    {% endfor %}
+</div>

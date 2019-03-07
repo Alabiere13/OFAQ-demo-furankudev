@@ -15,7 +15,7 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ app.user.username }} ({{ app.user.role.name }})
+                <img class="avatar-image" src="{{ app.user.image }}" alt="avatar{{ app.user.id }}"> {{ app.user.username }} ({{ app.user.role.name }})
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{{ path('user_show')}}">Profil</a>

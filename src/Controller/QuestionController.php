@@ -20,7 +20,7 @@ class QuestionController extends AbstractController
      */
     public function index(QuestionRepository $questionRepo, TagRepository $tagRepo)
     {
-        $questions = $questionRepo->findAllActiveOrderedByMostRecentlyAdded();
+        $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
         $tags = $tagRepo->findAll();
         return $this->render('question/index.html.twig', [
             'page_title' => 'Les questions des utilisateurs',
@@ -32,10 +32,13 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/tag/{id}/index", name="indexByTag", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function indexByTag(Tag $tag)
+    public function indexByTag(Tag $tag, TagRepository $tagRepo)
     {
+        $tags = $tagRepo->findAll();
         return $this->render('question/index_by_tag.html.twig', [
             'page_title' => 'Catégorie - ' . $tag->getName(),
+            'current_tag' => $tag,
+            'tags' => $tags
         ]);
     }
 

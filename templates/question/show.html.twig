@@ -5,20 +5,24 @@
 {% block main %}
     <div class="jumbotron">
         <h2 class="text-center display-3">{{ question.title }}</h2>
-        <p class="text-center lead">Par 
-                            <span class="font-weight-bold">
-                                <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
-                                &nbsp;{{ question.user.username }} 
-                            </span> 
-                        le&nbsp;{{ question.createdAt |date("m/d/Y") }} </p>
+        <p class="text-center lead">{{ question.createdAt |date("d/m/Y") }} </p>
+        <p class="text-center lead h2">Question ? {{ question.body }}</p>
+        <hr class="my-4">
+        <p class="text-center lead h3">Auteur : <span class="font-weight-bold">
+            <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
+            &nbsp;{{ question.user.username }}</span>, inscrit depuis le {{ question.user.createdAt |date("d/m/Y")}} - {{ question.user.questions |length }} questions posée(s), {{ question.user.answers |length }} réponses proposée(s)
+        </p>
+        <p class="text-center font-italic lead">{{ question.user.description }}</p>
         <hr class="my-4">
         <div class="d-flex justify-content-center">
-            {% for tag in question.tags %}
-                <span class="badge badge-pill badge-info">{{ tag.name }}</span> &nbsp;
-            {% endfor %}
+            <p class="text-center lead h3">Catégorie(s) :  
+                {% for tag in question.tags %}
+                    <span class="badge badge-pill badge-info"><a href="{{ path('question_indexByTag', {id: tag.id })}}" class="link">
+                    <img class="tag-image" src="{{ tag.image }}" alt="tag{{ tag.id }}">&nbsp;{{ tag.name }}
+                </a></span> &nbsp;
+                {% endfor %}
+            </p>
         </div>
-        <hr class="my-4">
-        <p class="text-center">{{ question.body }}</p>
         <hr class="my-4">
         <div class="list-group">
             {% for answer in question.answers %}
@@ -33,7 +37,7 @@
                             <small>Par 
                                 <span class="font-weight-bold">
                                     <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
-                                    &nbsp;{{ question.user.username }} </span> le&nbsp;{{ answer.createdAt |date("m/d/Y") }}
+                                    &nbsp;{{ question.user.username }} </span> le&nbsp;{{ answer.createdAt |date("d/m/Y") }}
                                 
                             </small>
                         </div>
