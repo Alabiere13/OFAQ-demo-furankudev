@@ -4,4 +4,16 @@
 
 {% block main %}
     <h2>Nouvelle question</h2>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% include 'partial/_type_form.html.twig' %}
+    {% else %}
+        <div class="h5 card border-info ml-auto mr-auto mb-3 text-center w-50">
+            <div class="card-header">Il est nécessaire d'être connecté avec un compte utilisateur pour poser une question !</div>
+            <img class="w-100" src="https://cdn.pixabay.com/photo/2017/01/04/12/01/space-1951858_960_720.png" alt="go">
+            <div class="card-body">
+                <a href ="{{ path('app_login')}}" class="card-title">Se connecter</a> ou 
+                <a href ="{{ path('user_new')}}" class="card-title">Créer un compte</a>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

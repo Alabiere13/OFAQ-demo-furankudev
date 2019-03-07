@@ -10,7 +10,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface, Serializable
 {
@@ -83,6 +85,11 @@ class User implements UserInterface, Serializable
         $this->createdAt = new DateTime();
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->username;
     }
 
     public function getId(): ?int
@@ -299,4 +306,5 @@ class User implements UserInterface, Serializable
             // $this->salt
         ) = unserialize($serialized, ['allowed_classes' => false]);
     }
+
 }

@@ -2,8 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
+use App\Form\UserType;
+use App\Repository\RoleRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /** 
  *  @Route("", name="user_") 
@@ -13,10 +20,30 @@ class UserController extends AbstractController
     /**
      * @Route("/signin", name="new", methods={"GET", "POST"})
      */
-    public function new()
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, RoleRepository $roleRepo)
     {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($encodedPassword);
+            $user->setRole($roleRepo->findOneBy(['name' => 'Utilisateur']));
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                $user->getUsername() . ', votre compte a été créé, vous pouvez vous connecter !'
+            );
+
+            return $this->redirectToRoute('app_login');
+        }
+
         return $this->render('user/signin.html.twig', [
             'page_title' => 'Inscription',
+            'form' => $form->createView()
         ]);
     }
 
@@ -33,10 +60,36 @@ class UserController extends AbstractController
     /**
      * @Route("/account/edit", name="edit", methods={"GET", "POST"})
      */
-    public function edit()
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, RoleRepository $roleRepo, UserRepository $userRepo)
     {
+        $oldPassword = $user->getPassword();
+
+        $user = $userRepo->find($this->getUser()->getId());
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if(is_null($user->getPassword())){
+                $encodedPassword = $oldPassword;
+            } else {
+                $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+                $user->setPassword($encodedPassword);
+            }
+            $user->setRole($roleRepo->findOneBy(['name' => 'Utilisateur']));
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'info',
+                $user->getUsername() . ', votre profil a été mis à jour !'
+            );
+
+            return $this->redirectToRoute('user_show');
+        }
+
         return $this->render('user/edit.html.twig', [
             'page_title' => 'Mettre à jour le profil',
+            'form' => $form->createView()
         ]);
     }
 }

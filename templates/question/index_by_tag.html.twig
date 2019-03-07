@@ -1,7 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_with_sidebar.html.twig' %}
 
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
-{% block main %}
-    <h2>Catégorie</h2>
+{% block sidebar %}
+    {% include 'question/_sidebar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    <h2 class="h2"><img class="tag-image" src="{{ current_tag.image }}" alt="tag{{ current_tag.id }}">&nbsp;{{ current_tag.name }}</h2>
+    <p class="lead">{{ current_tag.description }} </p> 
+    <hr class="my-4">
+    <div id="accordion">
+        {% for question in current_tag.questions %}
+            {% include 'question/_accordion.html.twig' %}
+        {% endfor %}
+    </div>
 {% endblock %}

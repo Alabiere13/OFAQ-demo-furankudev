@@ -3,5 +3,68 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block main %}
-    <h2>Question</h2>
+    <div class="jumbotron">
+        <h2 class="text-center display-3">{{ question.title }}</h2>
+        <p class="text-center lead">{{ question.createdAt |date("d/m/Y") }} </p>
+        <p class="text-center lead h2">Question ? {{ question.body }}</p>
+        <hr class="my-4">
+        <p class="text-center lead h3">Auteur : <span class="font-weight-bold">
+            <img class="avatar-image" src="{{ question.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
+            &nbsp;{{ question.user.username }}</span>, inscrit depuis le {{ question.user.createdAt |date("d/m/Y")}} - {{ question.user.questions |length }} questions posée(s), {{ question.user.answers |length }} réponses proposée(s)
+        </p>
+        <p class="text-center font-italic lead">{{ question.user.description }}</p>
+        <hr class="my-4">
+        <div class="d-flex justify-content-center">
+            <p class="text-center lead h3">Catégorie(s) :  
+                {% for tag in question.tags %}
+                    <span class="badge badge-pill badge-info"><a href="{{ path('question_indexByTag', {id: tag.id })}}" class="link">
+                    <img class="tag-image" src="{{ tag.image }}" alt="tag{{ tag.id }}">&nbsp;{{ tag.name }}
+                </a></span> &nbsp;
+                {% endfor %}
+            </p>
+        </div>
+        <hr class="my-4">
+        <div class="list-group">
+            {% for answer in question.answers %}
+                {% if answer.isValid == true %}
+                    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <span class="w-100 m-2 text-center badge badge-primary">-- Réponse validée par l'auteur --</span>
+                {% else %}
+                    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                {% endif %}
+                        <div class="d-flex{ w-100 justify-content-between">
+                            <h5 class="mb-1"> {{ answer.title }} </h5>
+                            <small>Par 
+                                <span class="font-weight-bold">
+                                    <img class="avatar-image" src="{{ answer.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
+                                    &nbsp;{{ answer.user.username }} </span> le&nbsp;{{ answer.createdAt |date("d/m/Y") }}
+                                
+                            </small>
+                        </div>
+                        <hr class="m-1">
+                        <p class="mb-1 text-italic">{{ answer.body }}</p>
+                        {% if app.user.id == question.user.id %}
+                            <div class="p-2 m-auto text-center">
+                                {% include 'question/_edit_validation_form.html.twig' %}
+                            </div>
+                        {% endif %}
+                    </div>
+            {% endfor %}
+        </div>
+        <hr class="my-4">
+        <h2 class="text-center">Proposer une réponse !</h2>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% include 'partial/_type_form.html.twig' %}
+        {% else %}
+            <div class="h5 card border-info ml-auto mr-auto mb-3 text-center w-50">
+                <div class="card-header">Il est nécessaire d'être connecté avec un compte utilisateur pour rédiger une réponse !</div>
+                <img class="w-100" src="https://cdn.pixabay.com/photo/2017/01/04/12/01/space-1951858_960_720.png" alt="go">
+                <div class="card-body">
+                    <a href ="{{ path('app_login')}}" class="card-title">Se connecter</a> ou 
+                    <a href ="{{ path('user_new')}}" class="card-title">Créer un compte</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
+

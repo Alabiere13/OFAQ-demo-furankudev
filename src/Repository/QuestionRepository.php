@@ -19,12 +19,12 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    public function findAllActiveOrderedByMostRecentlyAdded()
+    public function findActiveOrderedByMostRecentlyAdded()
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.isActive = true')
             ->orderBy('q.createdAt', 'DESC')
-            ->setMaxResults(10)
+            ->setMaxResults(20)
             ->getQuery()
             ->getResult()
         ;

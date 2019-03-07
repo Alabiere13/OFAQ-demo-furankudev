@@ -62,6 +62,7 @@ class Question
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question")
+     * @ORM\OrderBy({"isValid" = "DESC"})
      */
     private $answers;
 
@@ -72,6 +73,11 @@ class Question
         $this->createdAt = new DateTime();
         $this->tags = new ArrayCollection();
         $this->answers = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     public function getId(): ?int
@@ -173,9 +179,9 @@ class Question
 
     public function addTag(Tag $tag): self
     {
-        if (!$this->tags->contains($tag)) {
+        //if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-        }
+        //}
 
         return $this;
     }
