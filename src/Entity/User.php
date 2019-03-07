@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface, Serializable
 {
@@ -300,4 +301,5 @@ class User implements UserInterface, Serializable
             // $this->salt
         ) = unserialize($serialized, ['allowed_classes' => false]);
     }
+
 }

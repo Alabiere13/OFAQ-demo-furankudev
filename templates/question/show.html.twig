@@ -9,7 +9,7 @@
         <p class="text-center lead h2">Question ? {{ question.body }}</p>
         <hr class="my-4">
         <p class="text-center lead h3">Auteur : <span class="font-weight-bold">
-            <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
+            <img class="avatar-image" src="{{ question.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
             &nbsp;{{ question.user.username }}</span>, inscrit depuis le {{ question.user.createdAt |date("d/m/Y")}} - {{ question.user.questions |length }} questions posée(s), {{ question.user.answers |length }} réponses proposée(s)
         </p>
         <p class="text-center font-italic lead">{{ question.user.description }}</p>
@@ -36,8 +36,8 @@
                             <h5 class="mb-1"> {{ answer.title }} </h5>
                             <small>Par 
                                 <span class="font-weight-bold">
-                                    <img class="avatar-image" src="{{ question.user.image }}" alt="avatar{{ question.user.id }}">
-                                    &nbsp;{{ question.user.username }} </span> le&nbsp;{{ answer.createdAt |date("d/m/Y") }}
+                                    <img class="avatar-image" src="{{ answer.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
+                                    &nbsp;{{ answer.user.username }} </span> le&nbsp;{{ answer.createdAt |date("d/m/Y") }}
                                 
                             </small>
                         </div>
