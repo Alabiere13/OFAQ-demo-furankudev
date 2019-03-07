@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\RoleRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,6 +33,11 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                $user->getUsername() . ', votre compte a été créé, vous pouvez vous connecter !'
+            );
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -46,7 +52,6 @@ class UserController extends AbstractController
      */
     public function show()
     {
-        dump($this->getUser());
         return $this->render('user/account.html.twig', [
             'page_title' => 'Profil',
         ]);
@@ -55,10 +60,30 @@ class UserController extends AbstractController
     /**
      * @Route("/account/edit", name="edit", methods={"GET", "POST"})
      */
-    public function edit()
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, RoleRepository $roleRepo, UserRepository $userRepo)
     {
+        $user = $userRepo->find($this->getUser()->getId());
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($encodedPassword);
+            $user->setRole($roleRepo->findOneBy(['name' => 'Utilisateur']));
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'info',
+                $user->getUsername() . ', votre profil a été mis à jour !'
+            );
+
+            return $this->redirectToRoute('user_show');
+        }
+
         return $this->render('user/edit.html.twig', [
             'page_title' => 'Mettre à jour le profil',
+            'form' => $form->createView()
         ]);
     }
 }

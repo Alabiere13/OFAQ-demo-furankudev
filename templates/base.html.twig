@@ -24,7 +24,7 @@
             <main>
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ label }}">
+                        <div class="h2 text-center ml-auto mr-auto mb-3 mt-3 w-75 alert alert-{{ label }}">
                             {{ message }}
                         </div>
                     {% endfor %}

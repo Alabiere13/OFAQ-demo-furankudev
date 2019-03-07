@@ -11,7 +11,7 @@
         <p class="text-center lead h4">Votre présentation: <span class="font-italic ">{{ app.user.description }}</span></p>
         <p class="text-center lead">Inscrit depuis le {{ app.user.createdAt |date("d/m/Y") }} </p>
         <p class="lead text-center mt-2">
-                <a class="btn btn-primary btn-lg " href="{{ path('user_edit', {id: app.user.id })}}" role="button">Modifier mon profil</a>
+                <a class="btn btn-primary btn-lg " href="{{ path('user_edit')}}" role="button">Modifier mon profil</a>
             </p>
         <hr class="my-4">
         <p class="text-center lead h3">{{ app.user.questions |length }} questions posée(s) : <span class="font-weight-bold"> </p>
