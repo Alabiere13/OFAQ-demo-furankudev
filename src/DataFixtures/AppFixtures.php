@@ -118,6 +118,10 @@ class AppFixtures extends Fixture
             'isActive' => true,
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
             'updatedAt' => null,
+        ), array(
+            function($question) { 
+                $question->fakerConstruct();
+            },
         ));
 
         $populator->addEntity('App\Entity\Answer', 80, array(

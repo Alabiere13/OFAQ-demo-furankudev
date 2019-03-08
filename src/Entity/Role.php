@@ -43,6 +43,11 @@ class Role
         return $this->name;
     }
 
+    public function fakerConstruct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

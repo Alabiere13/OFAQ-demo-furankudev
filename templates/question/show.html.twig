@@ -43,7 +43,7 @@
                         </div>
                         <hr class="m-1">
                         <p class="mb-1 text-italic">{{ answer.body }}</p>
-                        {% if app.user.id == question.user.id %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id == question.user.id %}
                             <div class="p-2 m-auto text-center">
                                 {% include 'question/_edit_validation_form.html.twig' %}
                             </div>
