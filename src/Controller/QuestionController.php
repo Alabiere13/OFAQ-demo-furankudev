@@ -7,14 +7,15 @@ use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\AnswerType;
 use App\Form\QuestionType;
+use App\Entity\VoteForQuestion;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\VoteForQuestionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\VoteForQuestionRepository;
 
 /** 
  *  @Route("", name="question_") 
@@ -83,15 +84,20 @@ class QuestionController extends AbstractController
     public function show(Question $question, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
         $voteValue = false;
+        $votes = $voteRepo->findBy([
+            'question' => $question,
+            'value' => true
+        ]);
 
         if ($this->getUser()) {
             $user = $userRepo->find($this->getUser()->getId());
-            $vote = $voteRepo->findOneBy([
+            $currentVote = $voteRepo->findOneBy([
                 'question' => $question,
                 'user' => $user,
+                'value' => true
             ]);
-            if ($vote) {
-                $voteValue = $vote->getValue();
+            if ($currentVote) {
+                $voteValue = true;
             }
         }
         
@@ -120,6 +126,7 @@ class QuestionController extends AbstractController
         return $this->render('question/show.html.twig', [
             'page_title' => 'Question - ' . $question->getTitle(),
             'question' => $question,
+            'votes' => $votes,
             'vote_value' => $voteValue,
             'form' => $form->createView()
         ]);
@@ -128,9 +135,29 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editVote", name="editVote", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editVote(Question $question)
+    public function editVote(Question $question, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
-        return $this->redirectToRoute('question_index');
+        if ($this->getUser()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $vote = $voteRepo->findOneBy([
+                'question' => $question,
+                'user' => $user,
+            ]);
+            if ($vote) {
+                $voteValue = $vote->getValue();
+                $vote->setValue($voteValue?false:true);
+            } else {
+                $vote = new VoteForQuestion();
+                $vote->setQuestion($question);
+                $vote->setUser($user);
+                $vote->setValue(true);
+                $entityManager->persist($vote);
+            }
+        }
+
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
     }
 
     /**

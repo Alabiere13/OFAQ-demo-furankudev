@@ -117,4 +117,12 @@ class VoteForQuestion
     {
         $this->createdAt = new DateTime();
     }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setPreUpdateValues()
+    {
+        $this->updatedAt = new DateTime();
+    }
 }

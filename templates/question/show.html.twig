@@ -7,6 +7,10 @@
         <h2 class="text-center display-3">{{ question.title }}</h2>
         <p class="text-center lead">{{ question.createdAt |date("d/m/Y") }} </p>
         <p class="text-center lead h2">Question ? {{ question.body }}</p>
+        <hr class="my-4">
+        <div class="d-flex justify-content-center">
+            <p class="text-center lead h3">Vote(s) : {{ votes |length }}</p>
+        </div>
         {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id != question.user.id %}
             <div class="p-2 m-auto text-center">
                 {% include 'question/_edit_vote_form.html.twig' %}
