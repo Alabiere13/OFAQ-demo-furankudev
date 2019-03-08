@@ -23,15 +23,7 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="editStatus", methods={"PUT"}, requirements={"id"="\d+"})
-     */
-    public function editStatus(Answer $answer)
-    {
-        return $this->redirectToRoute('question_index');
-    }
-
-    /**
-     * @Route("/{id}/validate", name="editValidation", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @Route("/{id}/editValidation", name="editValidation", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editValidation(Answer $answer, EntityManagerInterface $entityManager)
     {
@@ -39,6 +31,22 @@ class AnswerController extends AbstractController
             $answer->setIsValid(false);
         } else {
             $answer->setIsValid(true);
+        }
+
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function editStatus(Answer $answer, EntityManagerInterface $entityManager)
+    {
+        if($answer->getIsActive()) {
+            $answer->setIsActive(false);
+        } else {
+            $answer->setIsActive(true);
         }
 
         $entityManager->flush();

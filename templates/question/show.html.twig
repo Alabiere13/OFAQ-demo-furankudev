@@ -7,6 +7,13 @@
         <h2 class="text-center display-3">{{ question.title }}</h2>
         <p class="text-center lead">{{ question.createdAt |date("d/m/Y") }} </p>
         <p class="text-center lead h2">Question ? {{ question.body }}</p>
+        {% if is_granted('ROLE_MODERATOR') %}
+            <hr class="my-4">
+            <p class="text-center lead h3">Modération :</p>
+            <div class="p-2 m-auto text-center">
+                {% include 'question/_edit_status_form.html.twig' %}
+            </div>
+        {% endif %}
         <hr class="my-4">
         <div class="d-flex justify-content-center">
             <p class="text-center lead h3">Vote(s) : {{ votes |length }}</p>
@@ -34,7 +41,7 @@
         </div>
         <hr class="my-4">
         <div class="list-group">
-            {% for answer in question.answers %}
+            {% for answer in answers %}
                 {% if answer.isValid == true %}
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
                     <span class="w-100 m-2 text-center badge badge-primary">-- Réponse validée par l'auteur --</span>
@@ -54,7 +61,14 @@
                         <p class="mb-1 text-italic">{{ answer.body }}</p>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id == question.user.id %}
                             <div class="p-2 m-auto text-center">
-                                {% include 'question/_edit_validation_form.html.twig' %}
+                                {% include 'answer/_edit_validation_form.html.twig' %}
+                            </div>
+                        {% endif %}
+                        {% if is_granted('ROLE_MODERATOR') %}
+                            <hr class="my-4">
+                            <p class="text-center lead h3">Modération :</p>
+                            <div class="p-2 m-auto text-center">
+                                {% include 'answer/_edit_status_form.html.twig' %}
                             </div>
                         {% endif %}
                     </div>

@@ -10,6 +10,7 @@ use App\Form\QuestionType;
 use App\Entity\VoteForQuestion;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\VoteForQuestionRepository;
@@ -81,9 +82,10 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}", name="show", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function show(Question $question, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
+    public function show(Question $question, Request $request, EntityManagerInterface $entityManager, AnswerRepository $answerRepo, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
         $voteValue = false;
+
         $votes = $voteRepo->findBy([
             'question' => $question,
             'value' => true
@@ -103,6 +105,13 @@ class QuestionController extends AbstractController
         
         $question->setViewsCounter($question->getViewsCounter() + 1);
         $entityManager->flush();
+
+        if($this->isGranted('ROLE_MODERATOR')){
+            $answers = $answerRepo->findAllOrderedByValidationByQuestion($question);
+        } else {
+            $answers = $answerRepo->findActiveOrderedByValidationByQuestion($question);
+        }
+        
 
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer);
@@ -126,6 +135,7 @@ class QuestionController extends AbstractController
         return $this->render('question/show.html.twig', [
             'page_title' => 'Question - ' . $question->getTitle(),
             'question' => $question,
+            'answers' => $answers,
             'votes' => $votes,
             'vote_value' => $voteValue,
             'form' => $form->createView()
@@ -163,8 +173,16 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editStatus(Question $question)
+    public function editStatus(Question $question, EntityManagerInterface $entityManager)
     {
-        return $this->redirectToRoute('question_index');
+        if($question->getIsActive()) {
+            $question->setIsActive(false);
+        } else {
+            $question->setIsActive(true);
+        }
+
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Answer;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Question;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Answer|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,35 @@ class AnswerRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Answer::class);
+    }
+
+    public function findAllOrderedByValidationByQuestion(Question $question)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.question', 'q')
+            ->addSelect('q')
+            ->where('a.question = :myquestion')
+            ->setParameter('myquestion', $question)
+            ->orderBy('a.isValid', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findActiveOrderedByValidationByQuestion(Question $question)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.question', 'q')
+            ->addSelect('q')
+            ->where('a.question = :myquestion')
+            ->setParameter('myquestion', $question)
+            ->andWhere('a.isActive = true')
+            ->orderBy('a.isValid', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**
