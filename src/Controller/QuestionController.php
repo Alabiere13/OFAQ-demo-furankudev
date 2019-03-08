@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\VoteForQuestionRepository;
 
 /** 
  *  @Route("", name="question_") 
@@ -79,8 +80,21 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}", name="show", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function show(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, Question $question)
+    public function show(Question $question, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
+        $voteValue = false;
+
+        if ($this->getUser()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $vote = $voteRepo->findOneBy([
+                'question' => $question,
+                'user' => $user,
+            ]);
+            if ($vote) {
+                $voteValue = $vote->getValue();
+            }
+        }
+        
         $question->setViewsCounter($question->getViewsCounter() + 1);
         $entityManager->flush();
 
@@ -89,7 +103,7 @@ class QuestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $userRepo->find($this->getUser()->getId());
+            
             $answer->setUser($user);
             $answer->setQuestion($question);
             $entityManager->persist($answer);
@@ -106,6 +120,7 @@ class QuestionController extends AbstractController
         return $this->render('question/show.html.twig', [
             'page_title' => 'Question - ' . $question->getTitle(),
             'question' => $question,
+            'vote_value' => $voteValue,
             'form' => $form->createView()
         ]);
     }
