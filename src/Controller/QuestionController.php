@@ -111,10 +111,18 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/question/{id}/edit", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @Route("/question/{id}/editVote", name="editVote", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function editVote(Question $question)
+    {
+        return $this->redirectToRoute('question_index');
+    }
+
+    /**
+     * @Route("/question/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editStatus(Question $question)
     {
-        return RedirectToRoute('question_index');
+        return $this->redirectToRoute('question_index');
     }
 }

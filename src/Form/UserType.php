@@ -27,8 +27,11 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $listener = function (FormEvent $event) {
-            if (is_null($event->getData()->getPassword())) {
-                $event->getForm()->add('password', RepeatedType::class, [
+            $form = $event->getForm();
+            $user = $event->getData();
+
+            if (is_null($user->getId())) {
+                $form ->add('password', RepeatedType::class, [
                     'type' => PasswordType::class,
                     'empty_data' => '',
                     'invalid_message' => 'Le mot de passe indiqué doit être identique dans les deux champs',
@@ -43,7 +46,7 @@ class UserType extends AbstractType
                     ]
                 ]);
             } else {
-                $event->getForm()->add('password', PasswordType::class, [
+                $form ->add('password', PasswordType::class, [
                     'empty_data' => '',
                     'label'    => "Mot de passe",
                     'attr' => ['placeholder' => 'Laisser vide si inchangé'],

@@ -7,6 +7,11 @@
         <h2 class="text-center display-3">{{ question.title }}</h2>
         <p class="text-center lead">{{ question.createdAt |date("d/m/Y") }} </p>
         <p class="text-center lead h2">Question ? {{ question.body }}</p>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id != question.user.id %}
+            <div class="p-2 m-auto text-center">
+                {% include 'question/_edit_vote_form.html.twig' %}
+            </div>
+        {% endif %}
         <hr class="my-4">
         <p class="text-center lead h3">Auteur : <span class="font-weight-bold">
             <img class="avatar-image" src="{{ question.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
