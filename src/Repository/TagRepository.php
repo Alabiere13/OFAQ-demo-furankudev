@@ -29,6 +29,16 @@ class TagRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findAllOrderedByMostRecentlyAdded()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Tag[] Returns an array of Tag objects
     //  */

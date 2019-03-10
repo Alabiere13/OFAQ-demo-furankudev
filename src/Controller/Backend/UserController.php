@@ -40,7 +40,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(User $user)
     {
@@ -51,7 +51,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/editRole", name="editRole", methods={"PATCH"})
+     * @Route("/{id}/editRole", name="editRole", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editRole(User $user, RoleRepository $roleRepo, EntityManagerInterface $entityManager)
     {

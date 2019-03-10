@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class UserType extends AbstractType
@@ -70,7 +71,7 @@ class UserType extends AbstractType
                     ])
                 ]
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'label'    => "Présentation",
                 'attr' => ['placeholder' => "Quelques mots pour vous présenter"],
             ])
