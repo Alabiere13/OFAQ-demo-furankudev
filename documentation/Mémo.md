@@ -73,3 +73,34 @@
 ### Difficultés :
 
     - Difficulté à venir sur la partie admin de user, qui devra gérer le rôle (désactivé pour la partie publique)
+
+## 08/03/2019
+
+### Avancées :
+
+    + Ajout modération sur questions et réponses
+    + Ajout système de vote sur la page question
+    + Modérateur peut voir les questions et réponses bloquées
+    + Ajout des votes dans les fixtures
+    + Correctif des fixtures pour ne plus avoir à commenter l'entity par rapport à l'array collection
+
+### Difficultés :
+
+    - Organisation du code pour gérer le vote sur la question et le nombre de votes pour la questions, car la table vote a une valeur true ou false (en cas d'annulation du vote)
+
+## 11/03/2019
+
+### Avancées :
+
+    + Ajout menu dynamique pour l'administration (user pour admin et user et tags pour modérateur et admin)
+    + Templates Admin users et tags
+    + Ajout, modificatio, suppression de tag
+    + Toggle statut d'un tag
+    + Toggle statut d'un utilisateur / modérateur en tant qu'admin
+    + Flash messages manquants
+
+
+
+### Difficultés :
+
+    - Mise en place de la pagination

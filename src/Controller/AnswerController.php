@@ -13,24 +13,24 @@ use Doctrine\ORM\EntityManagerInterface;
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/new", name="new", methods={"GET", "POST"})
-     */
-    public function new()
-    {
-        return $this->render('answer/new.html.twig', [
-            'page_title' => 'Ajouter une nouvelle question',
-        ]);
-    }
-
-    /**
      * @Route("/{id}/editValidation", name="editValidation", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editValidation(Answer $answer, EntityManagerInterface $entityManager)
     {
         if($answer->getIsValid()) {
             $answer->setIsValid(false);
+
+            $this->addFlash(
+                'info',
+                'La réponse de ' . $answer->getUser()->getUsername() . ' est dévalidée !'
+            );
         } else {
             $answer->setIsValid(true);
+
+            $this->addFlash(
+                'info',
+                'La réponse de ' . $answer->getUser()->getUsername() . 'a été validée !'
+            );
         }
 
         $entityManager->flush();
@@ -48,6 +48,11 @@ class AnswerController extends AbstractController
         } else {
             $answer->setIsActive(true);
         }
+
+        $this->addFlash(
+                'info',
+                'Le statut de la réponse de ' . $answer->getUser()->getUsername() . 'a été mis à jour !'
+            );
 
         $entityManager->flush();
         

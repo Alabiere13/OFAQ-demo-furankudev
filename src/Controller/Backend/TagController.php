@@ -108,6 +108,11 @@ class TagController extends AbstractController
             $tag->setIsActive(true);
         }
 
+        $this->addFlash(
+                'info',
+                'Le statut de la  catégorie ' . $tag->getName() . ' est mis à jour !'
+            );
+
         $entityManager->flush();
         
         return $this->redirectToRoute('backend_tag_index');
@@ -120,6 +125,11 @@ class TagController extends AbstractController
     {
         $entityManager->remove($tag);
         $entityManager->flush();
+
+        $this->addFlash(
+            'danger',
+            'La catégorie ' . $tag->getName() . ' a été supprimée !'
+        );
         
         return $this->redirectToRoute('backend_tag_index');
     }

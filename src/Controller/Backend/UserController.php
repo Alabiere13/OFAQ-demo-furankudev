@@ -65,6 +65,11 @@ class UserController extends AbstractController
         } 
 
         $entityManager->flush();
+
+        $this->addFlash(
+            'info',
+            'Les droits de ' . $user->getUsername() . ' ont été mis à jour !'
+        );
         
         return $this->redirectToRoute('backend_user_index');
     }

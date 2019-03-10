@@ -167,6 +167,11 @@ class QuestionController extends AbstractController
             }
         }
 
+        $this->addFlash(
+                'info',
+                'Le vote a bien été enregistré !'
+            );
+
         $entityManager->flush();
         
         return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
@@ -182,6 +187,11 @@ class QuestionController extends AbstractController
         } else {
             $question->setIsActive(true);
         }
+
+        $this->addFlash(
+            'info',
+            'La modification du statut de la question a bien été enregistrée !'
+        );
 
         $entityManager->flush();
         
