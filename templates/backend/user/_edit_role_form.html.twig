@@ -1,0 +1,10 @@
+<form action='{{ path('backend_user_editRole', {id: user.id }) }}' method="POST">
+  <fieldset>
+    <input type="hidden" name="_method" value="PATCH">
+      {% if user.role.name == "Utilisateur" %}
+        <button type="submit" class="btn btn-info"><i class="fas fa-mask"></i></i>&nbsp;Donner les droits de modérateur</button>
+      {% elseif  user.role.name == "Modérateur" %}
+        <button type="submit" class="btn btn-warning"><i class="fas fa-user-injured"></i></i>&nbsp;Resteindre les droits à un niveau utilisateur</button>
+      {% endif %}
+  </fieldset>
+</form>

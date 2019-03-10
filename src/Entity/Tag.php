@@ -66,6 +66,11 @@ class Tag
         return $this->name;
     }
 
+    public function fakerConstruct()
+    {
+        $this->questions = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

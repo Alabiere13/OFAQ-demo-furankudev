@@ -66,6 +66,11 @@ class Question
      */
     private $answers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\VoteForQuestion", mappedBy="question")
+     */
+    private $voteForQuestions;
+
     public function __construct()
     {
         $this->viewsCounter = 0;
@@ -73,11 +78,19 @@ class Question
         $this->createdAt = new DateTime();
         $this->tags = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->voteForQuestions = new ArrayCollection();
     }
 
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function fakerConstruct()
+    {
+        $this->tags = new ArrayCollection();
+        $this->answers = new ArrayCollection();
+        $this->voteForQuestions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,9 +192,9 @@ class Question
 
     public function addTag(Tag $tag): self
     {
-        //if (!$this->tags->contains($tag)) {
+        if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-        //}
+        }
 
         return $this;
     }
@@ -220,6 +233,37 @@ class Question
             // set the owning side to null (unless already changed)
             if ($answer->getQuestion() === $this) {
                 $answer->setQuestion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|VoteForQuestion[]
+     */
+    public function getVoteForQuestions(): Collection
+    {
+        return $this->voteForQuestions;
+    }
+
+    public function addVoteForQuestion(VoteForQuestion $voteForQuestion): self
+    {
+        if (!$this->voteForQuestions->contains($voteForQuestion)) {
+            $this->voteForQuestions[] = $voteForQuestion;
+            $voteForQuestion->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteForQuestion(VoteForQuestion $voteForQuestion): self
+    {
+        if ($this->voteForQuestions->contains($voteForQuestion)) {
+            $this->voteForQuestions->removeElement($voteForQuestion);
+            // set the owning side to null (unless already changed)
+            if ($voteForQuestion->getQuestion() === $this) {
+                $voteForQuestion->setQuestion(null);
             }
         }
 

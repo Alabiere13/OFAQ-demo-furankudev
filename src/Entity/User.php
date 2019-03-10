@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface, Serializable
 {
@@ -79,17 +78,30 @@ class User implements UserInterface, Serializable
      */
     private $answers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\VoteForQuestion", mappedBy="user")
+     */
+    private $voteForQuestions;
+
     public function __construct()
     {
         $this->isActive = true;
         $this->createdAt = new DateTime();
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->voteForQuestions = new ArrayCollection();
     }
 
     public function __toString()
     {
         return $this->username;
+    }
+
+    public function fakerConstruct()
+    {
+        $this->questions = new ArrayCollection();
+        $this->answers = new ArrayCollection();
+        $this->voteForQuestions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -305,6 +317,37 @@ class User implements UserInterface, Serializable
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    /**
+     * @return Collection|VoteForQuestion[]
+     */
+    public function getVoteForQuestions(): Collection
+    {
+        return $this->voteForQuestions;
+    }
+
+    public function addVoteForQuestion(VoteForQuestion $voteForQuestion): self
+    {
+        if (!$this->voteForQuestions->contains($voteForQuestion)) {
+            $this->voteForQuestions[] = $voteForQuestion;
+            $voteForQuestion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteForQuestion(VoteForQuestion $voteForQuestion): self
+    {
+        if ($this->voteForQuestions->contains($voteForQuestion)) {
+            $this->voteForQuestions->removeElement($voteForQuestion);
+            // set the owning side to null (unless already changed)
+            if ($voteForQuestion->getUser() === $this) {
+                $voteForQuestion->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 }

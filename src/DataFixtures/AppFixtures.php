@@ -7,6 +7,7 @@ use Faker\Factory;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Question;
+use App\Entity\VoteForQuestion;
 
 use Faker\ORM\Doctrine\Populator;
 use App\DataFixtures\Faker\TagProvider;
@@ -97,6 +98,7 @@ class AppFixtures extends Fixture
             'role' => $userRole,
           ), array(
             function($user) { 
+                $user->fakerConstruct();
                 $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getUsername());
                 $user->setPassword($encodedPassword);
             },
@@ -109,6 +111,10 @@ class AppFixtures extends Fixture
             'isActive' => true,
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
             'updatedAt' => null,
+        ), array(
+            function($tag) { 
+                $tag->fakerConstruct();
+            },
         ));
 
         $populator->addEntity('App\Entity\Question', 30, array(
@@ -118,6 +124,10 @@ class AppFixtures extends Fixture
             'isActive' => true,
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
             'updatedAt' => null,
+        ), array(
+            function($question) { 
+                $question->fakerConstruct();
+            },
         ));
 
         $populator->addEntity('App\Entity\Answer', 80, array(
@@ -126,6 +136,10 @@ class AppFixtures extends Fixture
             // 'isValid' => false,
             'isActive' => true,
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,
+        ));
+
+        $populator->addEntity('App\Entity\VoteForQuestion', 30, array(
             'updatedAt' => null,
         ));
 

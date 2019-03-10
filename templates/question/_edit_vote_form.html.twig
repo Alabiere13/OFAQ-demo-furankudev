@@ -1,0 +1,10 @@
+<form action='{{ path('question_editVote', {id: question.id }) }}' method="POST">
+  <fieldset>
+    <input type="hidden" name="_method" value="PATCH">
+      {% if not vote_value %}
+        <button type="submit" class="btn btn-info"><i class="fas fa-person-booth"></i>&nbsp;Donner son vote à cette question</button>
+      {% else %}
+        <button type="submit" class="btn btn-warning"><i class="fas fa-crosshairs"></i>&nbsp;Retirer son vote à cette question</button>
+      {% endif %}
+  </fieldset>
+</form>

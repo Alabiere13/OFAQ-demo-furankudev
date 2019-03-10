@@ -13,33 +13,46 @@ use Doctrine\ORM\EntityManagerInterface;
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/new", name="new", methods={"GET", "POST"})
-     */
-    public function new()
-    {
-        return $this->render('answer/new.html.twig', [
-            'page_title' => 'Ajouter une nouvelle question',
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="editStatus", methods={"PUT"}, requirements={"id"="\d+"})
-     */
-    public function editStatus(Answer $answer)
-    {
-        return $this->redirectToRoute('question_index');
-    }
-
-    /**
-     * @Route("/{id}/validate", name="editValidation", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @Route("/{id}/editValidation", name="editValidation", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editValidation(Answer $answer, EntityManagerInterface $entityManager)
     {
         if($answer->getIsValid()) {
             $answer->setIsValid(false);
+
+            $this->addFlash(
+                'info',
+                'La réponse de ' . $answer->getUser()->getUsername() . ' est dévalidée !'
+            );
         } else {
             $answer->setIsValid(true);
+
+            $this->addFlash(
+                'info',
+                'La réponse de ' . $answer->getUser()->getUsername() . 'a été validée !'
+            );
         }
+
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function editStatus(Answer $answer, EntityManagerInterface $entityManager)
+    {
+        if($answer->getIsActive()) {
+            $answer->setIsActive(false);
+        } else {
+            $answer->setIsActive(true);
+        }
+
+        $this->addFlash(
+                'info',
+                'Le statut de la réponse de ' . $answer->getUser()->getUsername() . 'a été mis à jour !'
+            );
 
         $entityManager->flush();
         

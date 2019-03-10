@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-header" id="heading{{ question.id }}">
         <h3 class="mb-0 d-flex">
-            <div>
-                <span class="mt-3 badge badge-info badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
+            <div class="d-flex align-items-center">
+                <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
             </div>
             <button class="btn w-100 btn-link {% if not loop.first %}collapsed{% endif %}" data-toggle="collapse" data-target="#collapse{{ question.id }}" aria-expanded="false" aria-controls="collapse{{ question.id }}">
                 <h4 class="h4 font-weight-bold text-center">{{ question.title }}</h4>
@@ -13,6 +13,12 @@
                     </span> 
                 le {{ question.createdAt |date("d/m/Y") }} </p>
             </button>
+              {% if is_granted('ROLE_MODERATOR') %}
+                    <div class="p-2 m-auto text-center">
+                        {% include 'question/_edit_status_form.html.twig' %}
+                    </div>
+                {% endif %}
+        </h3>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tag in question.tags %}
                     <button type="button" class="btn btn-link"><a href="{{ path('question_indexByTag', {id: tag.id })}}" class="link">
@@ -20,7 +26,7 @@
                 </a></button>
                 {% endfor %}
             </div>
-        </h3>
+
     </div>
     <div id="collapse{{ question.id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="heading{{ question.id }}" data-parent="#accordion">
         <div class="card-body">
@@ -28,6 +34,10 @@
             <p class="lead text-center mt-2">
                 <a class="btn btn-primary btn-lg " href="{{ path('question_show', {id: question.id })}}" role="button">Lire la suite</a>
             </p>
+            <hr class="my-4">
+            <div class="d-flex justify-content-center">
+                <p class="text-center lead h3">Vote(s) : </p>
+            </div>
         </div>
     </div>
 </div>

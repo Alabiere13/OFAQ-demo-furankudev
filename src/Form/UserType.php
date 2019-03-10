@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class UserType extends AbstractType
@@ -27,8 +28,11 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $listener = function (FormEvent $event) {
-            if (is_null($event->getData()->getPassword())) {
-                $event->getForm()->add('password', RepeatedType::class, [
+            $form = $event->getForm();
+            $user = $event->getData();
+
+            if (is_null($user->getId())) {
+                $form ->add('password', RepeatedType::class, [
                     'type' => PasswordType::class,
                     'empty_data' => '',
                     'invalid_message' => 'Le mot de passe indiqué doit être identique dans les deux champs',
@@ -43,7 +47,7 @@ class UserType extends AbstractType
                     ]
                 ]);
             } else {
-                $event->getForm()->add('password', PasswordType::class, [
+                $form ->add('password', PasswordType::class, [
                     'empty_data' => '',
                     'label'    => "Mot de passe",
                     'attr' => ['placeholder' => 'Laisser vide si inchangé'],
@@ -67,7 +71,7 @@ class UserType extends AbstractType
                     ])
                 ]
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'label'    => "Présentation",
                 'attr' => ['placeholder' => "Quelques mots pour vous présenter"],
             ])

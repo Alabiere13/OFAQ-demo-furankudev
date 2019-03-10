@@ -19,6 +19,26 @@ class TagRepository extends ServiceEntityRepository
         parent::__construct($registry, Tag::class);
     }
 
+    public function findAllOrderedByVariable($variable = 't.name')
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy($variable, 'ASC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllOrderedByMostRecentlyAdded()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Tag[] Returns an array of Tag objects
     //  */
