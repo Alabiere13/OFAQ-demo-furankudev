@@ -20,7 +20,9 @@
                     Administration
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a class="dropdown-item {% if app.request.attributes.get('_route') == 'backend_user_index' %}active{% endif %}" href="{{ path('backend_user_index')}}">Gestion des utilisateurs</a>
+                    {% endif %}
                     <a class="dropdown-item {% if app.request.attributes.get('_route') == 'backend_tag_index' %}active{% endif %}" href="{{ path('backend_tag_index')}}">Gestion des catégories</a>
                     </div>
                 </li>
