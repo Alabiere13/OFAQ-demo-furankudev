@@ -26,10 +26,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(QuestionRepository $questionRepo, TagRepository $tagRepo)
+    public function index(QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
     {
         $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
         $tags = $tagRepo->findAll();
+        
+        
         return $this->render('question/index.html.twig', [
             'page_title' => 'Les questions des utilisateurs',
             'questions' => $questions,

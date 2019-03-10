@@ -24,10 +24,8 @@ class QuestionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('q')
             ->andWhere('q.isActive = true')
             ->orderBy('q.createdAt', 'DESC')
-            ->setMaxResults(50)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     // /**
