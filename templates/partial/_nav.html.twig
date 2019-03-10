@@ -9,26 +9,36 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ path('question_index')}}">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'question_index' %}active{% endif %}" href="{{ path('question_index')}}">Home</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('question_new')}}">Poser une question</a>
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'question_new' %}active{% endif %}" href="{{ path('question_new')}}">Poser une question</a>
             </li>
-            
+            {% if is_granted('ROLE_MODERATOR') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Administration
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item {% if app.request.attributes.get('_route') == 'backend_user_index' %}active{% endif %}" href="{{ path('backend_user_index')}}">Gestion des utilisateurs</a>
+                    <a class="dropdown-item {% if app.request.attributes.get('_route') == 'backend_tag_index' %}active{% endif %}" href="{{ path('backend_tag_index')}}">Gestion des catégories</a>
+                    </div>
+                </li>
+            {% endif %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="avatar-image" src="{{ app.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ app.user.id }}"> {{ app.user.username }} ({{ app.user.role.name }})
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ path('user_show')}}">Profil</a>
-                <a class="dropdown-item" href="{{ path('app_logout')}}">Déconnexion</a>
-                </div>
-            </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="avatar-image" src="{{ app.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ app.user.id }}"> {{ app.user.username }} ({{ app.user.role.name }})
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item {% if app.request.attributes.get('_route') == 'user_show' %}active{% endif %}" href="{{ path('user_show')}}">Profil</a>
+                    <a class="dropdown-item" href="{{ path('app_logout')}}">Déconnexion</a>
+                    </div>
+                </li>
             {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_login')}}">Connexion/Inscription</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}" href="{{ path('app_login')}}">Connexion/Inscription</a>
+                </li>
             {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
