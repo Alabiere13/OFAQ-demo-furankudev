@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -17,10 +18,21 @@ class UserController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(UserRepository $userRepo)
+    public function index(Request $request, UserRepository $userRepo, RoleRepository $roleRepo)
     {
-        $users = $userRepo->findAll();
+        $adminRole = $roleRepo->findOneByName('Administrateur');
+        $moderatorRole = $roleRepo->findOneByName('Modérateur');
+        $userRole = $roleRepo->findOneByName('Utilisateur');
 
+        $role = $request->query->get('role', false);
+
+        if ($role) {
+            $orderRole = $roleRepo->findOneByName($role);
+            $users = $userRepo->findAllOrderedByUsernameByRole($orderRole);
+        } else {
+            $users = $userRepo->findAllOrderedByUsername();
+        }
+        
         return $this->render('backend/user/index.html.twig', [
             'page_title' => 'Administration - Liste des utilisateurs',
             'users' => $users

@@ -1,8 +1,23 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_with_sidebar.html.twig' %}
 
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
-{% block main %}
+{% block sidebar %}
+    <h2 class="h3">Filtrer la liste</h2>
+    <div class="list-group">
+        <a href="{{ path('backend_user_index', {role: 'Utilisateur'})}}" class="list-group-item list-group-item-action d-flex justify-content-between">
+                Utilisateurs
+        </a>
+        <a href="{{ path('backend_user_index', {role: 'Modérateur'})}}" class="list-group-item list-group-item-action d-flex justify-content-between">
+                Modérateurs
+        </a>
+        <a href="{{ path('backend_user_index', {role: 'Administrateur'})}}" class="list-group-item list-group-item-action d-flex justify-content-between">
+                Administrateurs
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
      <h2 class="h2">Administration des utilisateurs</h2>
 
      <table class="table">
