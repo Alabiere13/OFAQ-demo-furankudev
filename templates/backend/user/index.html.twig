@@ -3,5 +3,41 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block main %}
-    <h2>UserAdmin</h2>
+     <h2 class="h2">Administration des utilisateurs</h2>
+
+     <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom d'utilisateur</th>
+                <th>Avatar</th>
+                <th>Email</th>
+                <th>Droits</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>
+                    <img class="avatar-image" src="{{ user.image ?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ user.id }}">
+                </td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role.name }}</td>
+                <td>
+                    <a href="">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
