@@ -14,7 +14,7 @@
             <li class="nav-item">
                 <a class="nav-link {% if app.request.attributes.get('_route') == 'question_new' %}active{% endif %}" href="{{ path('question_new')}}">Poser une question</a>
             </li>
-            {% if is_granted('ROLE_MODERATOR') %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Administration
@@ -43,8 +43,8 @@
                 </li>
             {% endif %}
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Mot-clé">
+        <form class="form-inline my-2 my-lg-0" action="{{ path('question_index')}}">
+            <input class="form-control mr-sm-2" name="search" type="text" placeholder="Chercher via un mot clé">
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Recherche</button>
         </form>
     </div>

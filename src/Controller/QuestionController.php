@@ -26,16 +26,23 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
+    public function index(Request $request, QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
     {
-        $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
-        $tags = $tagRepo->findAll();
+        $search = $request->query->get('search');
+
+        if($search){
+            $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
+         } else {
+            $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
+         }
         
+        $tags = $tagRepo->findAll();
         
         return $this->render('question/index.html.twig', [
             'page_title' => 'Les questions des utilisateurs',
             'questions' => $questions,
-            'tags' => $tags
+            'tags' => $tags,
+            'search' => $search
         ]);
     }
 

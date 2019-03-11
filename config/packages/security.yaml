@@ -44,8 +44,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: '^\/backend\/user/', roles: ROLE_ADMIN }
+        - { path: '^\/backend\/tag/', roles: ROLE_MODERATOR }
+        - { path: '^\/question\/[0-9]+',methods: ['POST', 'PATCH'], roles: ROLE_USER } 
+        - { path: '^\/account',methods: ['GET', 'POST'], roles: ROLE_USER } 
 
     role_hierarchy:
         ROLE_MODERATOR:       ROLE_USER

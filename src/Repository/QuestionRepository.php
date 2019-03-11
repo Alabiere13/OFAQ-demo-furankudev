@@ -25,7 +25,25 @@ class QuestionRepository extends ServiceEntityRepository
             ->andWhere('q.isActive = true')
             ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
+    }
+
+    public function findActiveOrderedByMostRecentlyAddedByTitle($search)
+    {
+        return $this->createQueryBuilder('q')
+            ->join('q.answers', 'a')
+            ->addSelect('a')
+            ->orWhere('q.title LIKE :search')
+            ->orWhere('q.body LIKE :search')
+            ->orWhere('a.title LIKE :search')
+            ->orWhere('a.body LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->andWhere('q.isActive = true')
+            ->orderBy('q.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**
