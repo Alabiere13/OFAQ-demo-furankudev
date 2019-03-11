@@ -20,10 +20,11 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    public function findActiveOrderedByMostRecentlyAdded($firstResult = 0, $maxResults = 7)
+    public function findActiveOrderedByMostRecentlyAdded($isActive = true, $firstResult = 0, $maxResults = 7)
     {
         $queryBuilder = $this->createQueryBuilder('q')
-            ->andWhere('q.isActive = true')
+            ->andWhere('q.isActive IN (:isActive)')
+            ->setParameter('isActive', $isActive)
             ->orderBy('q.createdAt', 'DESC')
             ->setFirstResult($firstResult)
             ->setMaxResults($maxResults);

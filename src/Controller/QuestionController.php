@@ -31,6 +31,8 @@ class QuestionController extends AbstractController
         $search = $request->query->get('search');
         $page = $request->query->get('page', 1);
 
+        $isActive = $this->isGranted('ROLE_MODERATOR') ? [true, false] : [true];
+
         if ($search){
             if ($page != 1) {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search, ($page - 1) * 7 - 1);
@@ -40,9 +42,9 @@ class QuestionController extends AbstractController
             }
          } else {
             if ($page != 1) {
-                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded(($page - 1) * 7 );
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive, ($page - 1) * 7 );
             } else {
-                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive);
                 $page = 1;
             }
             
@@ -200,7 +202,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editStatus(Question $question, EntityManagerInterface $entityManager)
+    public function editStatus(Question $question, Request $request, EntityManagerInterface $entityManager)
     {
         if($question->getIsActive()) {
             $question->setIsActive(false);
@@ -214,7 +216,9 @@ class QuestionController extends AbstractController
         );
 
         $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
         
-        return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        return $this->redirect($referer);
     }
 }
