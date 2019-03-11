@@ -65,7 +65,7 @@ class UserType extends AbstractType
                     ]),
                     new Length([
                         'min'        => 3,
-                        'max'        => 50,
+                        'max'        => 200,
                         'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
                         'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
                     ])

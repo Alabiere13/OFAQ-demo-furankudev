@@ -5,7 +5,10 @@
 {% block main %}
     <h2>Nouvelle question</h2>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    {% include 'partial/_type_form.html.twig' %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Poser cette nouvelle question</button>
+    {{ form_end(form) }}
     {% else %}
         <div class="h5 card border-info ml-auto mr-auto mb-3 text-center w-100">
             <div class="card-header">Il est nécessaire d'être connecté avec un compte utilisateur pour poser une question !</div>

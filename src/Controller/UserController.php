@@ -68,13 +68,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if(is_null($user->getPassword())){
+            if($user->getPassword() == ''){
                 $encodedPassword = $oldPassword;
             } else {
                 $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
-                $user->setPassword($encodedPassword);
             }
-            $entityManager->persist($user);
+            $user->setPassword($encodedPassword);
             $entityManager->flush();
 
             $this->addFlash(

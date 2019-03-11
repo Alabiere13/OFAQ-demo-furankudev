@@ -11,9 +11,6 @@
             <li class="nav-item active">
                 <a class="nav-link {% if app.request.attributes.get('_route') == 'question_index' %}active{% endif %}" href="{{ path('question_index')}}">Home</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {% if app.request.attributes.get('_route') == 'question_new' %}active{% endif %}" href="{{ path('question_new')}}">Poser une question</a>
-            </li>
             {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -39,9 +36,15 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}" href="{{ path('app_login')}}">Connexion/Inscription</a>
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}" href="{{ path('app_login')}}">Connexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'user_new' %}active{% endif %}" href="{{ path('user_new')}}">Inscription</a>
                 </li>
             {% endif %}
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'question_new' %}active{% endif %}" href="{{ path('question_new')}}">Poser une question</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="{{ path('question_index')}}">
             <input class="form-control mr-sm-2" name="search" type="text" placeholder="Chercher via un mot clé">
