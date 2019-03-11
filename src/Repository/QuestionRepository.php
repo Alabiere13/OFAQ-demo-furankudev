@@ -52,6 +52,17 @@ class QuestionRepository extends ServiceEntityRepository
         return $paginator;
     }
 
+    public function findTopQuestion()
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.isActive = true')
+            ->orderBy('q.viewsCounter', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult();
+        ;
+    }
+
     // /**
     //  * @return Question[] Returns an array of Question objects
     //  */
