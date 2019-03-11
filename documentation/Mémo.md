@@ -1,5 +1,7 @@
 # Projet FAQ-O-Clock - Franck MULLER
 
+## Trello : https://trello.com/b/EWBHIAlo/projet-faq-o-clock-franck-muller-04-03-2019-au-12-03-2019
+
 ## Utilisateurs pour les tests
 
     * User : moldu/moldu
@@ -88,7 +90,7 @@
 
     - Organisation du code pour gérer le vote sur la question et le nombre de votes pour la questions, car la table vote a une valeur true ou false (en cas d'annulation du vote)
 
-## 11/03/2019
+## 10/03/2019
 
 ### Avancées :
 
@@ -103,4 +105,28 @@
 
 ### Difficultés :
 
-    - Mise en place de la pagination
+    - Mise en place de la pagination via un bundle, abandon
+
+## 11/03/2019
+
+### Avancées :
+
+    + Gestion de la pagination manuelle via repository, controller et template
+    + Gestion page précedente et suivante en fonction du numéro de page
+    + Ajout des liens vers les numéros de pages existants
+    + Gestion des droits utilisateurs sur Security yaml
+    + Corrections de petits bugs (mot de passe modifié lors d'un edit du profil, ...) suite aux tests et vérification du respect du cahier des charges
+    + Gestion erreur 404 et ajout page custom
+    + Création d'une colonne Slug dans Question et de l'utilitaire en version améliorée (gestion signes spéciaux)
+    + Ajout du slug dans les fixtures
+    + Organisation du code de fixtures en méthodes privates appelées dans load
+    + Création d'un listener pour gestion automatique du slug au new et edit, ajout de la gestion du updatedAt sur toutes les entités (sauf Role)
+    + Création d'un subscriber pour faire apparaître la question la plus consultée dans les vues générées via QuestionController
+    + Gestion du style des questions ou réponses bloquées par la modération pour les différencier dans les listes en tant que modo
+    + Optimisation des customs queries pour gérer à la fois la pagination et la modération dans index de Questions
+
+
+
+### Difficultés :
+
+    - Gestion des évènements prePersist et Update via Subscriber, passage vers Listener pour corriger le problème
