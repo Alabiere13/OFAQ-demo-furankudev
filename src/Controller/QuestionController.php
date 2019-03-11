@@ -33,14 +33,14 @@ class QuestionController extends AbstractController
 
         if ($search){
             if ($page != 1) {
-                $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search, $page * 7 - 1);
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search, ($page - 1) * 7 - 1);
             } else {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
                 $page = 1;
             }
          } else {
             if ($page != 1) {
-                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($page * 7 - 1);
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded(($page - 1) * 7 );
             } else {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
                 $page = 1;

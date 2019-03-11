@@ -1,6 +1,6 @@
 
 {% set count = questions |length / 7 %}
-{% set page_max = count |round(0, 'floor') %}
+{% set page_max = count |round(0, 'ceil') %}
 {% if questions |length > 7 and page >= 0 and page <= page_max %}
     <p class="text-center font-weight-bold lead h3">Au total : {{ questions | length }} questions</p>
     <p class="text-center h2">Page {{ page }} sur {{ page_max }}</p>
