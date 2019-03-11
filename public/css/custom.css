@@ -15,3 +15,9 @@
     height: 100px;
     border-radius:100%;
 }
+
+a.active {
+    background-color: grey;
+    color: white;
+    border-radius:25%
+}
