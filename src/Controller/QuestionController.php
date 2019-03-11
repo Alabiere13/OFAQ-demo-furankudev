@@ -26,16 +26,38 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
+    public function index(Request $request, QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
     {
-        $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
-        $tags = $tagRepo->findAll();
+        $search = $request->query->get('search');
+        $page = $request->query->get('page', 1);
+
+        $isActive = $this->isGranted('ROLE_MODERATOR') ? [true, false] : [true];
+
+        if ($search){
+            if ($page != 1) {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search, ($page - 1) * 7 - 1);
+            } else {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
+                $page = 1;
+            }
+         } else {
+            if ($page != 1) {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive, ($page - 1) * 7 );
+            } else {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive);
+                $page = 1;
+            }
+            
+         }
         
+        $tags = $tagRepo->findAll();
         
         return $this->render('question/index.html.twig', [
             'page_title' => 'Les questions des utilisateurs',
             'questions' => $questions,
-            'tags' => $tags
+            'tags' => $tags,
+            'search' => $search,
+            'page' => $page
         ]);
     }
 
@@ -180,7 +202,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editStatus(Question $question, EntityManagerInterface $entityManager)
+    public function editStatus(Question $question, Request $request, EntityManagerInterface $entityManager)
     {
         if($question->getIsActive()) {
             $question->setIsActive(false);
@@ -194,7 +216,9 @@ class QuestionController extends AbstractController
         );
 
         $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
         
-        return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        return $this->redirect($referer);
     }
 }

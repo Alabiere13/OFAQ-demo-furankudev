@@ -15,3 +15,10 @@
     height: 100px;
     border-radius:100%;
 }
+
+a.active {
+    background-color: grey;
+    color: white;
+    text-decoration: underline;
+    border-radius:25%
+}

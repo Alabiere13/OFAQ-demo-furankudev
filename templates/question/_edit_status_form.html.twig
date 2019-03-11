@@ -1,10 +1,10 @@
-<form action='{{ path('question_editStatus', {id: question.id }) }}' method="POST">
-  <fieldset>
-    <input type="hidden" name="_method" value="PATCH">
+<form class="d-inline" action='{{ path('question_editStatus', {id: question.id }) }}' method="POST">
+  <fieldset class="d-inline">
+    <input class="d-inline" type="hidden" name="_method" value="PATCH">
       {% if question.isActive %}
-        <button type="submit" class="btn btn-info"><i class="fas fa-eye-slash"></i>&nbsp;Désactiver cette question</button>
+        <button type="submit" class="btn btn-info d-inline"><i class="fas fa-eye-slash"></i>&nbsp;Désactiver cette question</button>
       {% else %}
-        <button type="submit" class="btn btn-warning"><i class="fas fa-eye"></i>&nbsp;Activer cette question</button>
+        <button type="submit" class="btn btn-warning d-inline"><i class="fas fa-eye"></i>&nbsp;Activer cette question</button>
       {% endif %}
   </fieldset>
 </form>

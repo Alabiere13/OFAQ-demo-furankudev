@@ -28,7 +28,6 @@ class AnswerRepository extends ServiceEntityRepository
             ->where('a.question = :myquestion')
             ->setParameter('myquestion', $question)
             ->orderBy('a.isValid', 'DESC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;
@@ -43,7 +42,6 @@ class AnswerRepository extends ServiceEntityRepository
             ->setParameter('myquestion', $question)
             ->andWhere('a.isActive = true')
             ->orderBy('a.isValid', 'DESC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;

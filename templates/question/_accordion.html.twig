@@ -13,7 +13,7 @@
                     </span> 
                 le {{ question.createdAt |date("d/m/Y") }} </p>
             </button>
-              {% if is_granted('ROLE_MODERATOR') %}
+              {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
                     <div class="p-2 m-auto text-center">
                         {% include 'question/_edit_status_form.html.twig' %}
                     </div>

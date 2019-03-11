@@ -25,7 +25,6 @@ class VoteForQuestionRepository extends ServiceEntityRepository
             ->andWhere('v.value = :val')
             ->setParameter('val', $value)
             ->orderBy('v.id', 'ASC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
             ;

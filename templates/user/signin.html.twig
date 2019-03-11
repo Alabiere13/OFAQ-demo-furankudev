@@ -16,5 +16,8 @@
 
 {% block content %}
     <h2>Inscription</h2>
-    {% include 'partial/_type_form.html.twig' %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">S'enregistrer en tant que nouvel utilisateur</button>
+    {{ form_end(form) }}
 {% endblock %}

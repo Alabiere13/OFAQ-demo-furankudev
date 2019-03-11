@@ -4,5 +4,8 @@
 
 {% block main %}
     <h2>Ajouter une catégorie</h2>
-    {% include 'partial/_type_form.html.twig' %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Ajouter cette nouvelle catégorie</button>
+    {{ form_end(form) }}
 {% endblock %}
