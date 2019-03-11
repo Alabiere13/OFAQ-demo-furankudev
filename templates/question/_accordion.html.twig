@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header" id="heading{{ question.id }}">
+    <div class="card-header {{ question.isActive?: 'alert-dismissible alert-secondary' }}" id="heading{{ question.id }}">
         <h3 class="mb-0 d-flex">
             <div class="d-flex align-items-center">
                 <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
@@ -34,10 +34,10 @@
             <p class="lead text-center mt-2">
                 <a class="btn btn-primary btn-lg " href="{{ path('question_show', {id: question.id })}}" role="button">Lire la suite</a>
             </p>
-            <hr class="my-4">
+{#             <hr class="my-4">
             <div class="d-flex justify-content-center">
                 <p class="text-center lead h3">Vote(s) : </p>
-            </div>
+            </div> #}
         </div>
     </div>
 </div>

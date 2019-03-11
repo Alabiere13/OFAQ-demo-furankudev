@@ -64,8 +64,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/tag/{id}/index", name="indexByTag", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function indexByTag(Tag $tag, TagRepository $tagRepo)
+    public function indexByTag(Tag $tag = null, TagRepository $tagRepo)
     {
+        if (!$tag) {
+            throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
+        }
+
         $tags = $tagRepo->findAll();
         return $this->render('question/index_by_tag.html.twig', [
             'page_title' => 'Catégorie - ' . $tag->getName(),
@@ -106,8 +110,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}", name="show", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function show(Question $question, Request $request, EntityManagerInterface $entityManager, AnswerRepository $answerRepo, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
+    public function show(Question $question = null, Request $request, EntityManagerInterface $entityManager, AnswerRepository $answerRepo, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
+        if (!$question) {
+            throw $this->createNotFoundException("La question indiquée n'existe pas"); 
+        }
+        
         $voteValue = false;
 
         $votes = $voteRepo->findBy([
@@ -169,8 +177,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editVote", name="editVote", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editVote(Question $question, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
+    public function editVote(Question $question = null, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
+        if (!$question) {
+            throw $this->createNotFoundException("La question indiquée n'existe pas"); 
+        }
+
         if ($this->getUser()) {
             $user = $userRepo->find($this->getUser()->getId());
             $vote = $voteRepo->findOneBy([
@@ -202,8 +214,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editStatus(Question $question, Request $request, EntityManagerInterface $entityManager)
+    public function editStatus(Question $question = null, Request $request, EntityManagerInterface $entityManager)
     {
+        if (!$question) {
+            throw $this->createNotFoundException("La question indiquée n'existe pas"); 
+        }
+
         if($question->getIsActive()) {
             $question->setIsActive(false);
         } else {

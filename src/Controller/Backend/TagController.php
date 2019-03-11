@@ -37,8 +37,12 @@ class TagController extends AbstractController
     /**
      * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Tag $tag)
+    public function show(Tag $tag = null)
     {
+        if (!$tag) {
+            throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
+        }
+
         return $this->render('backend/tag/show.html.twig', [
             'page_title' => 'Profil - ' . $tag->getName(),
             'tag' => $tag
@@ -75,8 +79,12 @@ class TagController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Tag $tag, Request $request, EntityManagerInterface $entityManager)
+    public function edit(Tag $tag = null, Request $request, EntityManagerInterface $entityManager)
     {
+        if (!$tag) {
+            throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
+        }
+
         $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
 
@@ -100,8 +108,12 @@ class TagController extends AbstractController
     /**
      * @Route("/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editStatus(Tag $tag, EntityManagerInterface $entityManager)
+    public function editStatus(Tag $tag = null, EntityManagerInterface $entityManager)
     {
+        if (!$tag) {
+            throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
+        }
+
         if($tag->getIsActive()) {
             $tag->setIsActive(false);
         } else {
@@ -121,8 +133,12 @@ class TagController extends AbstractController
         /**
      * @Route("/{id}/delete", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
      */
-    public function delete(Tag $tag, EntityManagerInterface $entityManager)
+    public function delete(Tag $tag = null, EntityManagerInterface $entityManager)
     {
+        if (!$tag) {
+            throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
+        }
+
         $entityManager->remove($tag);
         $entityManager->flush();
 

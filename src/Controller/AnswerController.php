@@ -15,8 +15,12 @@ class AnswerController extends AbstractController
     /**
      * @Route("/{id}/editValidation", name="editValidation", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editValidation(Answer $answer, EntityManagerInterface $entityManager)
+    public function editValidation(Answer $answer = null, EntityManagerInterface $entityManager)
     {
+        if (!$answer) {
+            throw $this->createNotFoundException("La réponse indiquée n'existe pas"); 
+        }
+
         if($answer->getIsValid()) {
             $answer->setIsValid(false);
 
@@ -41,8 +45,12 @@ class AnswerController extends AbstractController
     /**
      * @Route("/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editStatus(Answer $answer, EntityManagerInterface $entityManager)
+    public function editStatus(Answer $answer = null, EntityManagerInterface $entityManager)
     {
+        if (!$answer) {
+            throw $this->createNotFoundException("La réponse indiquée n'existe pas"); 
+        }
+
         if($answer->getIsActive()) {
             $answer->setIsActive(false);
         } else {
