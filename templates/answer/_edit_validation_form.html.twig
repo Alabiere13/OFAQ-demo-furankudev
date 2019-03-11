@@ -1,10 +1,10 @@
-<form action='{{ path('answer_editValidation', {id: answer.id }) }}' method="POST">
-  <fieldset>
+<form class="d-inline"action='{{ path('answer_editValidation', {id: answer.id }) }}' method="POST">
+  <fieldset class="d-inline">
     <input type="hidden" name="_method" value="PATCH">
-    <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="validationSwitch{{ answer.id }}" {% if answer.isValid %}checked=""{% endif %}>
-      <label class="custom-control-label" for="validationSwitch{{ answer.id }}">Validation de la réponse</label>
+    <div class="custom-control custom-switch d-inline">
+      <input type="checkbox" class="custom-control-input d-inline" id="validationSwitch{{ answer.id }}" {% if answer.isValid %}checked=""{% endif %}>
+      <label class="custom-control-label d-inline" for="validationSwitch{{ answer.id }}">Validation de la réponse</label>
     </div>
-    <button type="submit" class="btn btn-primary">Soumettre</button>
+    <button type="submit" class="btn btn-primary d-inline">Soumettre</button>
   </fieldset>
 </form>

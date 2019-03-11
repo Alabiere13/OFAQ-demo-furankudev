@@ -51,7 +51,7 @@ class AnswerController extends AbstractController
 
         $this->addFlash(
                 'info',
-                'Le statut de la réponse de ' . $answer->getUser()->getUsername() . 'a été mis à jour !'
+                'Le statut de la réponse de ' . $answer->getUser()->getUsername() . ' a été mis à jour !'
             );
 
         $entityManager->flush();

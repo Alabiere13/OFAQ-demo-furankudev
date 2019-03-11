@@ -9,20 +9,22 @@
         <p class="text-center lead h2">Question ? {{ question.body }}</p>
         {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
             <hr class="my-4">
-            <p class="text-center lead h3">Modération :</p>
-            <div class=" p-2 m-auto text-center d-inline">
-                {% include 'question/_edit_status_form.html.twig' %}
-            </div>
+            <div class="d-flex justify-content-center">
+                <p class="text-center lead h3 d-inline mt-auto mb-auto">Modération :</p>
+                <div class=" p-2 text-center d-inline">
+                    {% include 'question/_edit_status_form.html.twig' %}
+                </div>
+            </div> 
         {% endif %}
         <hr class="my-4">
         <div class="d-flex justify-content-center">
-            <p class="text-center lead h3">Vote(s) : {{ votes |length }}</p>
-        </div>
+            <p class="text-center lead h3 d-inline mt-auto mb-auto">Vote(s) : {{ votes |length }}</p>
         {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id != question.user.id %}
-            <div class="p-2 m-auto text-center">
+            <div class="p-2 text-center d-inline">
                 {% include 'question/_edit_vote_form.html.twig' %}
             </div>
         {% endif %}
+        </div>
         <hr class="my-4">
         <p class="text-center lead h3">Auteur : <span class="font-weight-bold">
             <img class="avatar-image" src="{{ question.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
@@ -67,9 +69,11 @@
                         {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
                             <hr class="my-4">
-                            <p class="text-center lead h3">Modération :</p>
-                            <div class="p-2 m-auto text-center">
-                                {% include 'answer/_edit_status_form.html.twig' %}
+                            <div class="d-flex justify-content-center">
+                                <p class="text-center lead h3 d-inline mt-auto mb-auto">Modération :</p>
+                                <div class="p-2 text-center d-inline">
+                                    {% include 'answer/_edit_status_form.html.twig' %}
+                                </div>
                             </div>
                         {% endif %}
                     </div>
