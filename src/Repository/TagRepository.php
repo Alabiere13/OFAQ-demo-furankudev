@@ -23,7 +23,6 @@ class TagRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->orderBy($variable, 'ASC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;
@@ -33,7 +32,6 @@ class TagRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->orderBy('t.createdAt', 'DESC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;

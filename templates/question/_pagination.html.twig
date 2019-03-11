@@ -1,0 +1,19 @@
+
+{% set count = questions |length / 7 %}
+{% set page_max = count |round(0, 'floor') %}
+{% if questions |length > 7 and page >= 0 and page <= page_max %}
+    <p class="text-center font-weight-bold lead h3">Au total : {{ questions | length }} questions</p>
+    <p class="text-center h2">Page {{ page }} sur {{ page_max }}</p>
+    <div class="d-flex justify-content-center">
+        {% if page > 1 %}
+            <p class="lead text-center mt-2 mr-2">
+                <a class="btn btn-primary btn-lg " href="{{ path('question_index', {'page': page - 1})}}" role="button">Page précédente</a>
+            </p>
+        {% endif %}
+        {% if page < page_max %}
+            <p class="lead text-center mt-2">
+                <a class="btn btn-primary btn-lg " href="{{ path('question_index', {'page': page + 1})}}" role="button">Page suivante</a>
+            </p>
+        {% endif %}     
+    </div>
+{% endif %}

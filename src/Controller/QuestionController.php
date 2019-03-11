@@ -29,11 +29,23 @@ class QuestionController extends AbstractController
     public function index(Request $request, QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
     {
         $search = $request->query->get('search');
+        $page = $request->query->get('page', 1);
 
-        if($search){
-            $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
+        if ($search){
+            if ($page != 1) {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search, $page * 7 - 1);
+            } else {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
+                $page = 1;
+            }
          } else {
-            $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
+            if ($page != 1) {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($page * 7 - 1);
+            } else {
+                $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded();
+                $page = 1;
+            }
+            
          }
         
         $tags = $tagRepo->findAll();
@@ -42,7 +54,8 @@ class QuestionController extends AbstractController
             'page_title' => 'Les questions des utilisateurs',
             'questions' => $questions,
             'tags' => $tags,
-            'search' => $search
+            'search' => $search,
+            'page' => $page
         ]);
     }
 

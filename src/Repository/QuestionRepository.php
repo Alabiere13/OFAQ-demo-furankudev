@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Question;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Question|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,19 +20,21 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    public function findActiveOrderedByMostRecentlyAdded()
+    public function findActiveOrderedByMostRecentlyAdded($firstResult = 0, $maxResults = 7)
     {
-        return $this->createQueryBuilder('q')
+        $queryBuilder = $this->createQueryBuilder('q')
             ->andWhere('q.isActive = true')
             ->orderBy('q.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
+            ->setFirstResult($firstResult)
+            ->setMaxResults($maxResults);
         ;
+        $paginator = new Paginator($queryBuilder);
+        return $paginator;
     }
 
-    public function findActiveOrderedByMostRecentlyAddedByTitle($search)
+    public function findActiveOrderedByMostRecentlyAddedByTitle($search, $firstResult = 0, $maxResults = 7)
     {
-        return $this->createQueryBuilder('q')
+        $queryBuilder =  $this->createQueryBuilder('q')
             ->join('q.answers', 'a')
             ->addSelect('a')
             ->orWhere('q.title LIKE :search')
@@ -41,9 +44,11 @@ class QuestionRepository extends ServiceEntityRepository
             ->setParameter('search', '%' . $search . '%')
             ->andWhere('q.isActive = true')
             ->orderBy('q.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
+            ->setFirstResult($firstResult)
+            ->setMaxResults($maxResults);
         ;
+        $paginator = new Paginator($queryBuilder);
+        return $paginator;
     }
 
     // /**

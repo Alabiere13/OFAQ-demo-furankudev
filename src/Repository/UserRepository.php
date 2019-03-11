@@ -28,7 +28,6 @@ class UserRepository extends ServiceEntityRepository
             ->where('u.role = :myrole')
             ->setParameter('myrole', $role)
             ->orderBy('u.username', 'ASC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;
@@ -38,7 +37,6 @@ class UserRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('u')
             ->orderBy('u.username', 'ASC')
-            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;
