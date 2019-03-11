@@ -30,12 +30,14 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $generator = Factory::create('fr_FR');
-        $generator->addProvider(new TagProvider($generator));
-        $generator->addProvider(new UserProvider($generator));
-        $generator->seed(1234);
-        $populator = new Populator($generator, $manager);
+        $userRole = $this->loadUsersAndRoles($manager);
+        $inserted = $this->loadPopulators($userRole, $manager);
+        $this->addTagsToQuestions($inserted, $manager);
+    }
 
+    private function loadUsersAndRoles(ObjectManager $manager)
+    {
+        
         $userRole = new Role();
         $userRole->setName('Utilisateur');
         $userRole->setCode('ROLE_USER');
@@ -89,6 +91,17 @@ class AppFixtures extends Fixture
         $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getUsername());
         $user->setPassword($encodedPassword);
         $manager->persist($user);
+
+        return $userRole;
+    }
+
+    private function loadPopulators($userRole, ObjectManager $manager)
+    {
+        $generator = Factory::create('fr_FR');
+        $generator->addProvider(new TagProvider($generator));
+        $generator->addProvider(new UserProvider($generator));
+        $generator->seed(1234);
+        $populator = new Populator($generator, $manager);
 
         $populator->addEntity('App\Entity\User', 25, array(
             'username' => function() use ($generator) { return $generator->unique()->randomSWUsername(); },
@@ -147,8 +160,11 @@ class AppFixtures extends Fixture
             'updatedAt' => null,
         ));
 
-        $inserted = $populator->execute();
+        return $inserted = $populator->execute();
+    }
 
+    private function addTagsToQuestions($inserted, ObjectManager $manager)
+    {
         $questions = $inserted['App\Entity\Question'];
         $tags = $inserted['App\Entity\Tag'];
         foreach ($questions as $question) {
