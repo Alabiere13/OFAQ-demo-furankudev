@@ -10,6 +10,11 @@
                 <a class="btn btn-primary btn-lg " href="{{ path('question_index', {'page': page - 1})}}" role="button">Page précédente</a>
             </p>
         {% endif %}
+        {% for i in 1..page_max %}
+            <p class="lead text-center mt-2 mr-2">
+                <a class="btn btn-primary btn-lg {% if page == i %} bg-primary active{% endif %}" href="{{ path('question_index', {'page': i })}}" role="button">{{ i }}</a>
+            </p>
+        {% endfor %}
         {% if page < page_max %}
             <p class="lead text-center mt-2">
                 <a class="btn btn-primary btn-lg " href="{{ path('question_index', {'page': page + 1})}}" role="button">Page suivante</a>

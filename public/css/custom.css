@@ -19,5 +19,6 @@
 a.active {
     background-color: grey;
     color: white;
+    text-decoration: underline;
     border-radius:25%
 }
