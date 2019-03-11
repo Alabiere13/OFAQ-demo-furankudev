@@ -42,8 +42,12 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(User $user)
+    public function show(User $user = null)
     {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
         return $this->render('backend/user/show.html.twig', [
             'page_title' => 'Profil - ' . $user->getUsername(),
             'user' => $user
@@ -53,8 +57,12 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/editRole", name="editRole", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editRole(User $user, RoleRepository $roleRepo, EntityManagerInterface $entityManager)
+    public function editRole(User $user = null, RoleRepository $roleRepo, EntityManagerInterface $entityManager)
     {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
         $moderatorRole = $roleRepo->findOneByName('Modérateur');
         $userRole = $roleRepo->findOneByName('Utilisateur');
 
