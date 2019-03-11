@@ -51,8 +51,11 @@
                 {% else %}
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                 {% endif %}
+                {% if not answer.isActive %}
+                    <span class="w-100 m-2 text-center badge badge-danger">-- Réponse désactivée par un modérateur --</span>
+                {% endif %}
                         <div class="d-flex{ w-100 justify-content-between">
-                            <h5 class="mb-1"> {{ answer.title }} </h5>
+                            <h5 class="mb-1"> {{ answer.title }}</h5>
                             <small>Par 
                                 <span class="font-weight-bold">
                                     <img class="avatar-image" src="{{ answer.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">

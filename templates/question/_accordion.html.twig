@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header" id="heading{{ question.id }}">
+    <div class="card-header {{ question.isActive?: 'alert-dismissible alert-secondary' }}" id="heading{{ question.id }}">
         <h3 class="mb-0 d-flex">
             <div class="d-flex align-items-center">
                 <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
