@@ -6,9 +6,10 @@ use \DateTime;
 use Faker\Factory;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Utils\Slugger;
 use App\Entity\Question;
-use App\Entity\VoteForQuestion;
 
+use App\Entity\VoteForQuestion;
 use Faker\ORM\Doctrine\Populator;
 use App\DataFixtures\Faker\TagProvider;
 use App\DataFixtures\Faker\UserProvider;
@@ -19,10 +20,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AppFixtures extends Fixture
 {
     private $passwordEncoder;
+    private $slugger;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, Slugger $slugger)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->slugger = $slugger;
     }
 
     public function load(ObjectManager $manager)
@@ -127,6 +130,7 @@ class AppFixtures extends Fixture
         ), array(
             function($question) { 
                 $question->fakerConstruct();
+                $question->setSlug($this->slugger->sluggify($question->getTitle()));
             },
         ));
 
