@@ -88,6 +88,11 @@ class User implements UserInterface, Serializable
      */
     private $voteForAnswers;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastConnectedAt;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -383,6 +388,18 @@ class User implements UserInterface, Serializable
                 $voteForAnswer->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastConnectedAt(): ?\DateTimeInterface
+    {
+        return $this->lastConnectedAt;
+    }
+
+    public function setLastConnectedAt(?\DateTimeInterface $lastConnectedAt): self
+    {
+        $this->lastConnectedAt = $lastConnectedAt;
 
         return $this;
     }

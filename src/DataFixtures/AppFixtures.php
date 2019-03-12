@@ -118,6 +118,7 @@ class AppFixtures extends Fixture
                 $user->fakerConstruct();
                 $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getUsername());
                 $user->setPassword($encodedPassword);
+                $user->setLastConnectedAt($user->getCreatedAt());
             },
         ));
 
