@@ -1,0 +1,59 @@
+<div class="list-group">
+    {% for answer in answers %}
+        {% set user_vote_for_answer = false %}
+        {% for vote in answer.voteForAnswers %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and vote.user.id == app.user.id %}
+                {% set user_vote_for_answer = true %}      
+            {% endif %}
+        {% endfor %}
+
+        {% if answer.isValid == true %}
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+            <span class="w-100 m-2 text-center badge badge-primary">-- Réponse validée par l'auteur --</span>
+        {% else %}
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+        {% endif %}
+        {% if not answer.isActive %}
+            <span class="w-100 m-2 text-center badge badge-danger">-- Réponse désactivée par un modérateur --</span>
+        {% endif %}
+
+        <div class="d-flex{ w-100 justify-content-between">
+            <h5 class="mb-1"> {{ answer.title }}</h5>
+            <small>Par 
+                <span class="font-weight-bold">
+                    <img class="avatar-image" src="{{ answer.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
+                    &nbsp;{{ answer.user.username }} </span> le&nbsp;{{ answer.createdAt |date("d/m/Y") }}
+            </small>
+        </div>
+
+        <hr class="m-1">
+        <p class="mb-1 text-italic">{{ answer.body }}</p>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id == question.user.id %}
+            <div class="p-2 m-auto text-center">
+                {% include 'answer/_edit_validation_form.html.twig' %}
+            </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-center mt-2">
+            <p class="text-center lead h3 d-inline mt-auto mb-auto">Vote(s) : {{ answer.voteForAnswers |length }} <i class="fas fa-heart"></i></p>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id != answer.user.id %}
+            <div class="p-2 text-center d-inline">
+                {% include 'answer/_edit_vote_form.html.twig' %}
+            </div>
+            {% else %}
+            <p class="d-inline h6 d-inline mt-auto mb-auto">&nbsp; (Il n'est pas possible de voter pour soi-même) </p>
+            {% endif %}
+        </div>
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
+            <hr class="my-4">
+            <div class="d-flex justify-content-center">
+                <p class="text-center lead h3 d-inline mt-auto mb-auto">Modération :</p>
+                <div class="p-2 text-center d-inline">
+                    {% include 'answer/_edit_status_form.html.twig' %}
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    {% endfor %}
+</div>

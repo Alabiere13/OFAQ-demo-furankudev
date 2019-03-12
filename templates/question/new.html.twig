@@ -4,6 +4,7 @@
 
 {% block main %}
     <h2>Nouvelle question</h2>
+
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(form) }}
@@ -19,4 +20,5 @@
             </div>
         </div>
     {% endif %}
+    
 {% endblock %}

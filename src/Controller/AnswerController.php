@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
+use App\Entity\VoteForAnswer;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\VoteForAnswerRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\EntityManagerInterface;
 
 /** 
  *  @Route("/answer", name="answer_") 
@@ -40,6 +44,49 @@ class AnswerController extends AbstractController
         $entityManager->flush();
         
         return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/toggleVote", name="toggleVote", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function editVote(Answer $answer = null, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForAnswerRepository $voteForAnswerRepo)
+    {
+        if (!$answer) {
+            throw $this->createNotFoundException("La réponse indiquée n'existe pas"); 
+        }
+
+        if ($this->getUser()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $vote = $voteForAnswerRepo->findOneBy([
+                'answer' => $answer,
+                'user' => $user,
+            ]);
+            if ($vote) {
+                $entityManager->remove($vote);
+
+                $this->addFlash(
+                    'danger',
+                    'Votre vote a bien été retiré !'
+                );
+
+            } else {
+                $vote = new VoteForAnswer();
+                $vote->setAnswer($answer);
+                $vote->setUser($user);
+                $entityManager->persist($vote);
+
+                $this->addFlash(
+                    'success',
+                    'Votre vote a bien été ajouté !'
+                );
+            }
+        }
+
+        $entityManager->flush();
+        
+        $referer = $request->headers->get('referer');
+        
+        return $this->redirect($referer);
     }
 
     /**

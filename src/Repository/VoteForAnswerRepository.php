@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\VoteForAnswer;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method VoteForAnswer|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,17 @@ class VoteForAnswerRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, VoteForAnswer::class);
+    }
+
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('v.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     // /**
