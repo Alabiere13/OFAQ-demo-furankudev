@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Utils\Slugger;
 use App\Entity\Question;
 
+use App\Entity\VoteForAnswer;
 use App\Entity\VoteForQuestion;
 use Faker\ORM\Doctrine\Populator;
 use App\DataFixtures\Faker\TagProvider;
@@ -156,7 +157,11 @@ class AppFixtures extends Fixture
             'updatedAt' => null,
         ));
 
-        $populator->addEntity('App\Entity\VoteForQuestion', 30, array(
+        $populator->addEntity('App\Entity\VoteForQuestion', 50, array(
+            'updatedAt' => null,
+        ));
+
+        $populator->addEntity('App\Entity\VoteForAnswer', 50, array(
             'updatedAt' => null,
         ));
 

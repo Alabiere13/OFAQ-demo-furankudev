@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteForAnswerRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class VoteForAnswer
 {
@@ -89,5 +91,21 @@ class VoteForAnswer
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setPrePersistValues()
+    {
+        $this->createdAt = new DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setPreUpdateValues()
+    {
+        $this->updatedAt = new DateTime();
     }
 }
