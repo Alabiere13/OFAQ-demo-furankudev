@@ -20,7 +20,7 @@ class UserController extends AbstractController
     /**
      * @Route("/signin", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, RoleRepository $roleRepo)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, RoleRepository $roleRepo, \Swift_Mailer $mailer)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -37,6 +37,20 @@ class UserController extends AbstractController
                 'success',
                 $user->getUsername() . ', votre compte a été créé, vous pouvez vous connecter !'
             );
+
+            $message = (new \Swift_Message("Bienvenue chez o'Faq"))
+                ->setFrom('sith13160@gmail.com')
+                ->setTo('sith13160@gmail.com', $user->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        // templates/emails/registration.html.twig
+                        'emails/notification.html.twig',
+                        ['username' => $user->getUsername()]
+                    ),
+                    'text/html'
+                );
+
+                $mailer->send($message);
 
             return $this->redirectToRoute('app_login');
         }

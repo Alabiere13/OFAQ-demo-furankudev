@@ -229,6 +229,7 @@ class QuestionController extends AbstractController
             $question->setIsActive(true);
         }
 
+
         $this->addFlash(
             'info',
             'La modification du statut de la question a bien été enregistrée !'
