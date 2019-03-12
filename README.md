@@ -1,5 +1,29 @@
 # FAQ-O-Clock
 
+## Petit mot pour Claire
+
+Cette évalutation a été un entraînement très intéressant, j'ai testé beaucoup de choses, et appris énormément, au delà du cahier des charges initial. 
+
+Le positif est que j'ai pu respecter le planning prévu lors de la conception et tenir les délais. A la nuance peut être que les dernières fonctionnalités ajoutées ont pu générer des bugs non décelés.
+
+J'ai mis dans le dossier documentation le cahier des charges créé lors de la phase de conception, ainsi que le MCD.
+
+On y trouve aussi que Mémo que j'ai utilisé chaque jour pour suivre mes avancées et mes difficultés (mode projet).
+
+Ci-dessous les informations qui peuvent être utiles. J'ai pull la dernière version du repo sur le site en ligne, je n'ai pu vérifier si tout était OK. C'était surtout pour tester la mise en ligne sur serveur.
+
+Pour le Trello, je peux ajouter des droits si c'est nécessaire. Il a été mon fil conducteur sur cette grosse semaine de travail.
+
+## Trello : https://trello.com/b/EWBHIAlo/projet-faq-o-clock-franck-muller-04-03-2019-au-12-03-2019
+
+## Version en ligne : http://tanuki-hub.space
+
+## Utilisateurs pour les tests
+
+    * User : moldu/moldu
+    * Modérateur : lechuck/lechuck
+    * Admin : vador/vador
+
 ## Objectif
 
 Développer un site de questions/réponses sur le modèle de [Quora](https://www.quora.com/), ou encore [StackOverflow](https://stackoverflow.com) : La FAQ-O-Clock !

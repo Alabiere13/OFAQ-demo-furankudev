@@ -1,6 +1,7 @@
 # Projet FAQ-O-Clock - Franck MULLER
 
 ## Trello : https://trello.com/b/EWBHIAlo/projet-faq-o-clock-franck-muller-04-03-2019-au-12-03-2019
+## Version en ligne : http://tanuki-hub.space
 
 ## Utilisateurs pour les tests
 
@@ -71,7 +72,6 @@
     + Ajout event listener sur gestion du mot de passe de UserType
     + Correction du bug qui modifie le mot de passe à la modification de ses données de profil
 
-
 ### Difficultés :
 
     - Difficulté à venir sur la partie admin de user, qui devra gérer le rôle (désactivé pour la partie publique)
@@ -101,8 +101,6 @@
     + Toggle statut d'un utilisateur / modérateur en tant qu'admin
     + Flash messages manquants
 
-
-
 ### Difficultés :
 
     - Mise en place de la pagination via un bundle, abandon
@@ -125,8 +123,26 @@
     + Gestion du style des questions ou réponses bloquées par la modération pour les différencier dans les listes en tant que modo
     + Optimisation des customs queries pour gérer à la fois la pagination et la modération dans index de Questions
 
-
-
 ### Difficultés :
 
     - Gestion des évènements prePersist et Update via Subscriber, passage vers Listener pour corriger le problème
+
+## 12/03/2019
+
+### Avancées :
+
+    + Mise en ligne du site en version prod sur serveur Gandi
+    + Attribution d'une url via NDD(http://tanuki-hub.space)
+    + Ajout de la gestion des votes aux questions sur Index
+    + Ajout de la gestion des votes aux réponses
+    + Ajout champ dernière connexion pour User, gestion fixtures, templates User Admin
+    + Ajout d'un listener sur le login pour renseigner le champ dernière connexion
+    + Test d'un env.dev
+    + Ajout d'un mail via Swift sur la création d'un compte (envoyé à l'utilisateur et en copie à l'admin pour test)
+    + Requête Ajax pour ajout d'un vote à une question sur show (bouton commenté pour remettre la gestion normale)
+
+### Difficultés :
+
+    - Difficultés pour le lien entre le nom de domaine et l'IP du serveur
+    - Impossible de mettre en place un flash message pour le login via le controller ou via un listener
+    - Difficultés pour traiter à 100% en Ajax le vote à une question (il faudrait aussi gérer le compteur de vote)
