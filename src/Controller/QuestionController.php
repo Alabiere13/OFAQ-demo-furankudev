@@ -176,7 +176,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editVote", name="editVote", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editVote(Question $question = null, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
+    public function editVote(Question $question = null, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
     {
         if (!$question) {
             throw $this->createNotFoundException("La question indiquée n'existe pas"); 
@@ -207,7 +207,9 @@ class QuestionController extends AbstractController
 
         $entityManager->flush();
         
-        return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        $referer = $request->headers->get('referer');
+        
+        return $this->redirect($referer);
     }
 
     /**

@@ -17,8 +17,8 @@
             </div> 
         {% endif %}
         <hr class="my-4">
-        <div class="d-flex justify-content-center">
-            <p class="text-center lead h3 d-inline mt-auto mb-auto">Vote(s) : {{ votes |length }}</p>
+        <div class="d-flex flex-wrap justify-content-center">
+            <p class="text-center lead h3 d-inline mt-auto mb-auto">Vote(s) : {{ votes |length }} <i class="fas fa-heart"></i></p>
         {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id != question.user.id %}
             <div class="p-2 text-center d-inline">
                 {% include 'question/_edit_vote_form.html.twig' %}

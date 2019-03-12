@@ -2,9 +2,9 @@
   <fieldset class="d-inline">
     <input class="d-inline" type="hidden" name="_method" value="PATCH">
       {% if not vote_value %}
-        <button type="submit" class="btn btn-info d-inline"><i class="fas fa-person-booth"></i>&nbsp;Donner son vote à cette question</button>
+        <button type="submit" class="btn btn-info d-inline"><i class="fas fa-heart"></i></i>&nbsp;Donner son vote</button>
       {% else %}
-        <button type="submit" class="btn btn-warning d-inline"><i class="fas fa-crosshairs"></i>&nbsp;Retirer son vote à cette question</button>
+        <button type="submit" class="btn btn-warning d-inline"><i class="fas fa-heart-broken"></i>&nbsp;Retirer son vote</button>
       {% endif %}
   </fieldset>
 </form>

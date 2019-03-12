@@ -3,10 +3,15 @@
         <h3 class="mb-0 d-flex">
             <div class="d-flex align-items-center">
             {% set question_with_vote = findQuestionAndVotes(question.id) %} 
-            
+            {% set vote_value = false %}
                 <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;<i class="far fa-eye"></i>
                 {% if question_with_vote %}
                     <br>{{ question_with_vote.voteForQuestions |length }}&nbsp;<i class="fas fa-heart"></i>
+                    {% for vote in question_with_vote.voteForQuestions %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') and vote.user.id == app.user.id %}
+                            {% set vote_value = true %}
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
                 </span>
             </div>
@@ -19,11 +24,18 @@
                     </span> 
                 le {{ question.createdAt |date("d/m/Y") }} </p>
             </button>
-              {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
-                    <div class="p-2 m-auto text-center">
-                        {% include 'question/_edit_status_form.html.twig' %}
-                    </div>
-                {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="w-25 d-flex flex-wrap">
+                    {% if is_granted('ROLE_MODERATOR') %}
+                        <div class="p-2 m-auto text-center">
+                            {% include 'question/_edit_status_form.html.twig' %}
+                        </div>
+                    {% endif %}
+                        <div class="p-2 m-auto text-center">
+                            {% include 'question/_edit_vote_form.html.twig' %}
+                        </div>
+                </div> 
+            {% endif %}
         </h3>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tag in question.tags %}
