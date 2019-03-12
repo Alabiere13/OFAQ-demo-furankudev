@@ -2,7 +2,13 @@
     <div class="card-header {{ question.isActive?: 'alert-dismissible alert-secondary' }}" id="heading{{ question.id }}">
         <h3 class="mb-0 d-flex">
             <div class="d-flex align-items-center">
-                <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
+            {% set question_with_vote = findQuestionAndVotes(question.id) %} 
+            
+                <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;<i class="far fa-eye"></i>
+                {% if question_with_vote %}
+                    <br>{{ question_with_vote.voteForQuestions |length }}&nbsp;<i class="fas fa-heart"></i>
+                {% endif %}
+                </span>
             </div>
             <button class="btn w-100 btn-link {% if not loop.first %}collapsed{% endif %}" data-toggle="collapse" data-target="#collapse{{ question.id }}" aria-expanded="false" aria-controls="collapse{{ question.id }}">
                 <h4 class="h4 font-weight-bold text-center">{{ question.title }}</h4>

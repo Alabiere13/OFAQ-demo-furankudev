@@ -33,6 +33,19 @@ class QuestionRepository extends ServiceEntityRepository
         return $paginator;
     }
 
+    public function findByVoteForQuestionAndByVoteIsTrue($id)
+    {
+        return $this->createQueryBuilder('q')
+            ->join('q.voteForQuestions', 'v')
+            ->addSelect('v')
+            ->andWhere('q.id = :questionId')
+            ->setParameter('questionId', $id)
+            ->andWhere('v.value = true')
+            ->orderBy('q.createdAt', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findActiveOrderedByMostRecentlyAddedByTitle($search, $firstResult = 0, $maxResults = 7)
     {
         $queryBuilder =  $this->createQueryBuilder('q')

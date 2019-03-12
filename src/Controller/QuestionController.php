@@ -40,15 +40,14 @@ class QuestionController extends AbstractController
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
                 $page = 1;
             }
-         } else {
+        } else {
             if ($page != 1) {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive, ($page - 1) * 7 );
             } else {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive);
                 $page = 1;
             }
-            
-         }
+        }
         
         $tags = $tagRepo->findAll();
         
