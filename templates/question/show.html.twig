@@ -29,5 +29,14 @@
         {% endif %}
     </div>
 
+    <script>
+        var toggleVoteApi = "{{  path('question_toggleVoteApi', {id: question.id })|e('js') }}";
+    </script>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 {% endblock %}
 

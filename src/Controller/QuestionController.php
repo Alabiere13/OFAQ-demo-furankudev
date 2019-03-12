@@ -215,6 +215,38 @@ class QuestionController extends AbstractController
     }
 
     /**
+     * @Route("/question/{id}/toggleVoteApi", name="toggleVoteApi", methods={"POST"}, requirements={"id"="\d+"})
+     */
+    public function toggleVoteApi(Question $question = null, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteForQuestionRepo)
+    {
+        if (!$question) {
+            throw $this->createNotFoundException("La question indiquée n'existe pas"); 
+        }
+
+        if ($this->getUser()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $vote = $voteForQuestionRepo->findOneBy([
+                'question' => $question,
+                'user' => $user,
+            ]);
+            if ($vote) {
+                $userVoteForQuestion = $vote->getValue();
+                $vote->setValue($userVoteForQuestion?false:true);
+            } else {
+                $vote = new VoteForQuestion();
+                $vote->setQuestion($question);
+                $vote->setUser($user);
+                $vote->setValue(true);
+                $entityManager->persist($vote);
+            }
+        }
+
+        $entityManager->flush();
+        
+        return $this->json($vote->getValue());
+    }
+
+    /**
      * @Route("/question/{id}/editStatus", name="editStatus", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editStatus(Question $question = null, Request $request, EntityManagerInterface $entityManager)

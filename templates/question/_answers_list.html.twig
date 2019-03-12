@@ -36,12 +36,14 @@
 
         <div class="d-flex justify-content-center mt-2">
             <p class="text-center lead h3 d-inline mt-auto mb-auto">Vote(s) : {{ answer.voteForAnswers |length }} <i class="fas fa-heart"></i></p>
-            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.id != answer.user.id %}
-            <div class="p-2 text-center d-inline">
-                {% include 'answer/_edit_vote_form.html.twig' %}
-            </div>
-            {% else %}
-            <p class="d-inline h6 d-inline mt-auto mb-auto">&nbsp; (Il n'est pas possible de voter pour soi-même) </p>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if app.user.id != answer.user.id %}
+                <div class="p-2 text-center d-inline">
+                    {% include 'answer/_edit_vote_form.html.twig' %}
+                </div>
+                {% else %}
+                <p class="d-inline h6 d-inline mt-auto mb-auto">&nbsp; (Il n'est pas possible de voter pour soi-même) </p>
+                {% endif %}
             {% endif %}
         </div>
 
@@ -57,3 +59,5 @@
         </div>
     {% endfor %}
 </div>
+
+
