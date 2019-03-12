@@ -2,7 +2,18 @@
     <div class="card-header {{ question.isActive?: 'alert-dismissible alert-secondary' }}" id="heading{{ question.id }}">
         <h3 class="mb-0 d-flex">
             <div class="d-flex align-items-center">
-                <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;vues </span>
+            {% set question_with_vote = findQuestionAndVotes(question.id) %} 
+            {% set user_vote_for_question = false %}
+                <span class=" badge pt-2 pb-2 badge-dark badge-pill">{{ question.viewsCounter }}&nbsp;<i class="far fa-eye"></i>
+                {% if question_with_vote %}
+                    <br>{{ question_with_vote.voteForQuestions |length }}&nbsp;<i class="fas fa-heart"></i>
+                    {% for vote in question_with_vote.voteForQuestions %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') and vote.user.id == app.user.id %}
+                            {% set user_vote_for_question = true %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </span>
             </div>
             <button class="btn w-100 btn-link {% if not loop.first %}collapsed{% endif %}" data-toggle="collapse" data-target="#collapse{{ question.id }}" aria-expanded="false" aria-controls="collapse{{ question.id }}">
                 <h4 class="h4 font-weight-bold text-center">{{ question.title }}</h4>
@@ -13,11 +24,18 @@
                     </span> 
                 le {{ question.createdAt |date("d/m/Y") }} </p>
             </button>
-              {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
-                    <div class="p-2 m-auto text-center">
-                        {% include 'question/_edit_status_form.html.twig' %}
-                    </div>
-                {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="w-25 d-flex flex-wrap">
+                    {% if is_granted('ROLE_MODERATOR') %}
+                        <div class="p-2 m-auto text-center">
+                            {% include 'question/_edit_status_form.html.twig' %}
+                        </div>
+                    {% endif %}
+                        <div class="p-2 m-auto text-center">
+                            {% include 'question/_edit_vote_form.html.twig' %}
+                        </div>
+                </div> 
+            {% endif %}
         </h3>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tag in question.tags %}
@@ -34,10 +52,6 @@
             <p class="lead text-center mt-2">
                 <a class="btn btn-primary btn-lg " href="{{ path('question_show', {id: question.id })}}" role="button">Lire la suite</a>
             </p>
-{#             <hr class="my-4">
-            <div class="d-flex justify-content-center">
-                <p class="text-center lead h3">Vote(s) : </p>
-            </div> #}
         </div>
     </div>
 </div>

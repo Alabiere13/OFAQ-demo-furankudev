@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -59,11 +61,17 @@ class Answer
      */
     private $question;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\VoteForAnswer", mappedBy="answer")
+     */
+    private $voteForAnswers;
+
     public function __construct()
     {
         $this->isValid = false;
         $this->isActive = true;
         $this->createdAt = new DateTime();
+        $this->voteForAnswers = new ArrayCollection();
     }
 
     public function __toString()
@@ -168,6 +176,37 @@ class Answer
     public function setQuestion(?Question $question): self
     {
         $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|VoteForAnswer[]
+     */
+    public function getVoteForAnswers(): Collection
+    {
+        return $this->voteForAnswers;
+    }
+
+    public function addVoteForAnswer(VoteForAnswer $voteForAnswer): self
+    {
+        if (!$this->voteForAnswers->contains($voteForAnswer)) {
+            $this->voteForAnswers[] = $voteForAnswer;
+            $voteForAnswer->setAnswer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteForAnswer(VoteForAnswer $voteForAnswer): self
+    {
+        if ($this->voteForAnswers->contains($voteForAnswer)) {
+            $this->voteForAnswers->removeElement($voteForAnswer);
+            // set the owning side to null (unless already changed)
+            if ($voteForAnswer->getAnswer() === $this) {
+                $voteForAnswer->setAnswer(null);
+            }
+        }
 
         return $this;
     }

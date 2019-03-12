@@ -13,6 +13,7 @@ use App\Repository\UserRepository;
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\VoteForAnswerRepository;
 use App\Repository\VoteForQuestionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(Request $request, QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteRepo)
+    public function index(Request $request, QuestionRepository $questionRepo, TagRepository $tagRepo, VoteForQuestionRepository $voteForQuestionRepo)
     {
         $search = $request->query->get('search');
         $page = $request->query->get('page', 1);
@@ -40,15 +41,14 @@ class QuestionController extends AbstractController
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAddedByTitle($search);
                 $page = 1;
             }
-         } else {
+        } else {
             if ($page != 1) {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive, ($page - 1) * 7 );
             } else {
                 $questions = $questionRepo->findActiveOrderedByMostRecentlyAdded($isActive);
                 $page = 1;
             }
-            
-         }
+        }
         
         $tags = $tagRepo->findAll();
         
@@ -110,41 +110,42 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}", name="show", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function show(Question $question = null, Request $request, EntityManagerInterface $entityManager, AnswerRepository $answerRepo, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
+    public function show(Question $question = null, Request $request, EntityManagerInterface $entityManager, AnswerRepository $answerRepo, UserRepository $userRepo, VoteForQuestionRepository $voteForQuestionRepo, VoteForAnswerRepository $voteForAnswerRepo)
     {
+        $question->setViewsCounter($question->getViewsCounter() + 1);
+        $entityManager->flush();
+
         if (!$question) {
             throw $this->createNotFoundException("La question indiquée n'existe pas"); 
         }
         
-        $voteValue = false;
+        $userVoteForQuestion = false;
 
-        $votes = $voteRepo->findBy([
+        $votesForQuestion = $voteForQuestionRepo->findBy([
             'question' => $question,
             'value' => true
         ]);
 
+
         if ($this->getUser()) {
             $user = $userRepo->find($this->getUser()->getId());
-            $currentVote = $voteRepo->findOneBy([
+            $currentVote = $voteForQuestionRepo->findOneBy([
                 'question' => $question,
                 'user' => $user,
                 'value' => true
             ]);
+
             if ($currentVote) {
-                $voteValue = true;
+                $userVoteForQuestion = true;
             }
         }
-        
-        $question->setViewsCounter($question->getViewsCounter() + 1);
-        $entityManager->flush();
 
         if($this->isGranted('ROLE_MODERATOR')){
             $answers = $answerRepo->findAllOrderedByValidationByQuestion($question);
         } else {
             $answers = $answerRepo->findActiveOrderedByValidationByQuestion($question);
         }
-        
-
+    
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);
@@ -168,8 +169,8 @@ class QuestionController extends AbstractController
             'page_title' => 'Question - ' . $question->getTitle(),
             'question' => $question,
             'answers' => $answers,
-            'votes' => $votes,
-            'vote_value' => $voteValue,
+            'votes_for_question' => $votesForQuestion,
+            'user_vote_for_question' => $userVoteForQuestion,
             'form' => $form->createView()
         ]);
     }
@@ -177,7 +178,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/editVote", name="editVote", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function editVote(Question $question = null, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteRepo)
+    public function editVote(Question $question = null, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteForQuestionRepo)
     {
         if (!$question) {
             throw $this->createNotFoundException("La question indiquée n'existe pas"); 
@@ -185,13 +186,13 @@ class QuestionController extends AbstractController
 
         if ($this->getUser()) {
             $user = $userRepo->find($this->getUser()->getId());
-            $vote = $voteRepo->findOneBy([
+            $vote = $voteForQuestionRepo->findOneBy([
                 'question' => $question,
                 'user' => $user,
             ]);
             if ($vote) {
-                $voteValue = $vote->getValue();
-                $vote->setValue($voteValue?false:true);
+                $userVoteForQuestion = $vote->getValue();
+                $vote->setValue($userVoteForQuestion?false:true);
             } else {
                 $vote = new VoteForQuestion();
                 $vote->setQuestion($question);
@@ -203,12 +204,46 @@ class QuestionController extends AbstractController
 
         $this->addFlash(
                 'info',
-                'Le vote a bien été enregistré !'
+                'Votre vote a bien été enregistré !'
             );
 
         $entityManager->flush();
         
-        return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        $referer = $request->headers->get('referer');
+        
+        return $this->redirect($referer);
+    }
+
+    /**
+     * @Route("/question/{id}/toggleVoteApi", name="toggleVoteApi", methods={"POST"}, requirements={"id"="\d+"})
+     */
+    public function toggleVoteApi(Question $question = null, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo, VoteForQuestionRepository $voteForQuestionRepo)
+    {
+        if (!$question) {
+            throw $this->createNotFoundException("La question indiquée n'existe pas"); 
+        }
+
+        if ($this->getUser()) {
+            $user = $userRepo->find($this->getUser()->getId());
+            $vote = $voteForQuestionRepo->findOneBy([
+                'question' => $question,
+                'user' => $user,
+            ]);
+            if ($vote) {
+                $userVoteForQuestion = $vote->getValue();
+                $vote->setValue($userVoteForQuestion?false:true);
+            } else {
+                $vote = new VoteForQuestion();
+                $vote->setQuestion($question);
+                $vote->setUser($user);
+                $vote->setValue(true);
+                $entityManager->persist($vote);
+            }
+        }
+
+        $entityManager->flush();
+        
+        return $this->json($vote->getValue());
     }
 
     /**
@@ -225,6 +260,7 @@ class QuestionController extends AbstractController
         } else {
             $question->setIsActive(true);
         }
+
 
         $this->addFlash(
             'info',

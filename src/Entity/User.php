@@ -83,6 +83,16 @@ class User implements UserInterface, Serializable
      */
     private $voteForQuestions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\VoteForAnswer", mappedBy="user")
+     */
+    private $voteForAnswers;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastConnectedAt;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -90,6 +100,7 @@ class User implements UserInterface, Serializable
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
         $this->voteForQuestions = new ArrayCollection();
+        $this->voteForAnswers = new ArrayCollection();
     }
 
     public function __toString()
@@ -346,6 +357,49 @@ class User implements UserInterface, Serializable
                 $voteForQuestion->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|VoteForAnswer[]
+     */
+    public function getVoteForAnswers(): Collection
+    {
+        return $this->voteForAnswers;
+    }
+
+    public function addVoteForAnswer(VoteForAnswer $voteForAnswer): self
+    {
+        if (!$this->voteForAnswers->contains($voteForAnswer)) {
+            $this->voteForAnswers[] = $voteForAnswer;
+            $voteForAnswer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteForAnswer(VoteForAnswer $voteForAnswer): self
+    {
+        if ($this->voteForAnswers->contains($voteForAnswer)) {
+            $this->voteForAnswers->removeElement($voteForAnswer);
+            // set the owning side to null (unless already changed)
+            if ($voteForAnswer->getUser() === $this) {
+                $voteForAnswer->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLastConnectedAt(): ?\DateTimeInterface
+    {
+        return $this->lastConnectedAt;
+    }
+
+    public function setLastConnectedAt(?\DateTimeInterface $lastConnectedAt): self
+    {
+        $this->lastConnectedAt = $lastConnectedAt;
 
         return $this;
     }

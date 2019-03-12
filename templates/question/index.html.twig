@@ -13,10 +13,9 @@
         <h2 class="h2">Les dernières questions de nos utilisateurs</h2>
     {% endif %}
     
-    
     <div id="accordion">
         {% for question in questions %}
-            {% include 'question/_accordion.html.twig' %}
+            {% include 'question/_questions_accordion.html.twig' %}
         {% else %}
             <p class="text-center lead h3">Aucune question ne correspond à la recherche</p>
             <p class="lead text-center mt-2">
