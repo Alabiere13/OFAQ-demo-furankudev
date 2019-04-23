@@ -1,0 +1,49 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    <h2 class="h3">Nous rejoindre</h2>
+    <div class="h5 card border-info ml-auto mr-auto mb-3 text-center">
+        <div class="card-header">Pas encore de compte utilisateur sur o'FAQ ?</div>
+        <img class="w-100" src="https://media.moddb.com/images/members/1/397/396533/profile/I-WANT-YOU-FOR-AN-ADVENTURE.png" alt="go">
+        <div class="card-body">
+            <a href ="{{ path('user_new')}}" class="card-title">S'enregistrer</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <h2 class="h3 mb-3 font-weight-normal">Connexion</h2>
+
+    
+    <label for="inputUsername" >Nom d'utilisateur</label>
+    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control mb-3" placeholder="Votre nom d'utilisateur" required autofocus>
+    
+    <label for="inputPassword" >Mot de passe</label>
+    <input type="password" name="password" id="inputPassword" class="form-control mb-3" placeholder="Votre mot de passe" required>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}">
+
+    
+        {# Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html #}
+
+    <div class="checkbox m-4">
+        <label>
+            <input type="checkbox" name="_remember_me" checked> Se souvenir de moi
+        </label>
+    </div>
+   
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Se connecter
+    </button>
+</form>
+{% endblock %}

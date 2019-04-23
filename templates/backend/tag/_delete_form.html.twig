@@ -1,0 +1,6 @@
+<form class="d-inline" action='{{ path('backend_tag_delete', {id: tag.id }) }}' method="POST">
+  <fieldset class="d-inline">
+    <input class="d-inline" type="hidden" name="_method" value="DELETE">
+        <button type="submit" class="btn btn-danger d-inline">Je confirme la suppresion de la catégorie {{ tag.name }}</button>
+  </fieldset>
+</form>

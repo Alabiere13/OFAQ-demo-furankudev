@@ -1,0 +1,29 @@
+<h2 class="h3">La question du moment <i class="fas fa-star"></i></h2>
+<div class="h5 card border-info ml-auto mr-auto mb-3 text-center">
+        <div class="card-header">{{ top_question.title }}
+            <p class="h6 text-italic text-center mt-2">Par 
+                <span class="font-weight-bold ">
+                    <img class="avatar-image" src="{{ top_question.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ top_question.user.id }}">
+                    &nbsp;{{ top_question.user.username }} 
+                </span> 
+                le {{ top_question.createdAt |date("d/m/Y") }} 
+            </p>
+        </div>
+        <div class="card-body">
+            <p class="text-center font-italic h6 mt-2">
+                {{ top_question.body|truncate(100) }}
+                <a class="btn btn-primary btn-lg d-block mt-3" href="{{ path('question_show', {id: top_question.id })}}" role="button">Lire la suite</a>
+            </p>
+        </div>
+    </div>
+
+<h2 class="h3">Catégories</h2>
+<div class="list-group">
+    {% for tag in tags %}
+        <a href="{{ path('question_indexByTag', {id: tag.id })}}" class="list-group-item list-group-item-action d-flex justify-content-between" >
+            <img class="tag-image" src="{{ tag.image }}" alt="tag{{ tag.id }}">&nbsp;{{ tag.name }}
+            <span class="h4 badge badge-dark badge-pill">{{ tag.questions |length }}</span>
+        </a>
+        
+    {% endfor %}
+</div>

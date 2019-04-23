@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+    <a class="navbar-brand h1" href="{{ path('question_index')}}">
+        o'<i class="far fa-question-circle"></i>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'question_index' %}active{% endif %}" href="{{ path('question_index')}}">Home</a>
+            </li>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Administration
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a class="dropdown-item {% if app.request.attributes.get('_route') == 'backend_user_index' %}active{% endif %}" href="{{ path('backend_user_index')}}">Gestion des utilisateurs</a>
+                    {% endif %}
+                    <a class="dropdown-item {% if app.request.attributes.get('_route') == 'backend_tag_index' %}active{% endif %}" href="{{ path('backend_tag_index')}}">Gestion des catégories</a>
+                    </div>
+                </li>
+            {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="avatar-image" src="{{ app.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ app.user.id }}"> {{ app.user.username }} ({{ app.user.role.name }})
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item {% if app.request.attributes.get('_route') == 'user_show' %}active{% endif %}" href="{{ path('user_show')}}">Profil</a>
+                    <a class="dropdown-item" href="{{ path('app_logout')}}">Déconnexion</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}" href="{{ path('app_login')}}">Connexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'user_new' %}active{% endif %}" href="{{ path('user_new')}}">Inscription</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'question_new' %}active{% endif %}" href="{{ path('question_new')}}">Poser une question</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="{{ path('question_index')}}">
+            <input class="form-control mr-sm-2" name="search" type="text" placeholder="Chercher via un mot clé">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Recherche</button>
+        </form>
+    </div>
+</nav>

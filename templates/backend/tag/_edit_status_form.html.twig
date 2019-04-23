@@ -1,0 +1,6 @@
+<form class="d-inline" action='{{ path('backend_tag_editStatus', {id: tag.id }) }}' method="POST">
+  <fieldset class="d-inline">
+    <input class="d-inline" type="hidden" name="_method" value="PATCH">
+        <button type="submit" class="btn btn-info d-inline"><i class="fas fa-toggle-{{ tag.isActive ?'off':'on'}}"></i></button>
+  </fieldset>
+</form>

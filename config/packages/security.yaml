@@ -1,0 +1,54 @@
+security:
+    encoders:
+        # use your user class name here
+        App\Entity\User:
+            # bcrypt or argon2i are recommended
+            # argon2i is more secure, but requires PHP 7.2 or the Sodium extension
+            algorithm: bcrypt
+            cost: 12
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        o_faq_db_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            provider: o_faq_db_provider
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path:   app_logout
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+                # by default, the feature is enabled by checking a
+                # checkbox in the login form (see below), uncomment the
+                # following line to always enable it.
+                always_remember_me: true
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: '^\/backend\/user/', roles: ROLE_ADMIN }
+        - { path: '^\/backend\/tag/', roles: ROLE_MODERATOR }
+        - { path: '^\/question\/[0-9]+',methods: ['POST', 'PATCH'], roles: ROLE_USER } 
+        - { path: '^\/account',methods: ['GET', 'POST'], roles: ROLE_USER } 
+
+    role_hierarchy:
+        ROLE_MODERATOR:       ROLE_USER
+        ROLE_ADMIN:       ROLE_MODERATOR

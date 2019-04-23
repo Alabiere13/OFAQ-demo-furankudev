@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <h2>Mettre à jour une catégorie</h2>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Mettre à jour les informations de cette catégorie</button>
+    {{ form_end(form) }}
+{% endblock %}

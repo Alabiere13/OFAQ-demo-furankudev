@@ -1,0 +1,46 @@
+<h2 class="text-center display-3">{{ question.title }}</h2>
+<p class="text-center lead">{{ question.createdAt |date("d/m/Y") }} </p>
+<p class="text-center lead h2">Question ? {{ question.body }}</p>
+{% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_MODERATOR') %}
+    <hr class="my-4">
+    <div class="d-flex justify-content-center">
+        <p class="text-center lead h3 d-inline mt-auto mb-auto">Modération :</p>
+        <div class=" p-2 text-center d-inline">
+            {% include 'question/_edit_status_form.html.twig' %}
+        </div>
+    </div> 
+{% endif %}
+<hr class="my-4">
+<div class="d-flex flex-wrap justify-content-center">
+    <p class="text-center lead h3 d-inline mt-auto mb-auto">Vote(s) : {{ votes_for_question |length }} <i class="fas fa-heart"></i></p>
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% if app.user.id != question.user.id %}
+        <div class="p-2 text-center d-inline">
+            {% include 'question/_edit_vote_form.html.twig' %}
+{#             {% if not user_vote_for_question %}
+                <button type="submit" class="btn btn-info d-inline toggleQuestionVote"><i class="fas fa-heart"></i></i>&nbsp;Donner son vote</button>
+            {% else %}
+                <button type="submit" class="btn btn-warning d-inline toggleQuestionVote"><i class="fas fa-heart-broken"></i>&nbsp;Retirer son vote</button>
+            {% endif %} #}
+        </div>
+        {% else %}
+        <p class="d-inline h6 d-inline mt-auto mb-auto">&nbsp; (Il n'est pas possible de voter pour soi-même) </p>
+    {% endif %}
+{% endif %}
+</div>
+<hr class="my-4">
+<p class="text-center lead h3">Auteur : <span class="font-weight-bold">
+    <img class="avatar-image" src="{{ question.user.image?:'http://image.noelshack.com/fichiers/2015/12/1426650974-quiz-les-personnages-de-tintin-5472.jpeg' }}" alt="avatar{{ question.user.id }}">
+    &nbsp;{{ question.user.username }}</span>, inscrit depuis le {{ question.user.createdAt |date("d/m/Y")}} - {{ question.user.questions |length }} questions posée(s), {{ question.user.answers |length }} réponses proposée(s)
+</p>
+<p class="text-center font-italic lead">{{ question.user.description }}</p>
+<hr class="my-4">
+<div class="d-flex justify-content-center">
+    <p class="text-center lead h3">Catégorie(s) :  
+        {% for tag in question.tags %}
+            <span class="badge badge-pill badge-info"><a href="{{ path('question_indexByTag', {id: tag.id })}}" class="link">
+            <img class="tag-image" src="{{ tag.image }}" alt="tag{{ tag.id }}">&nbsp;{{ tag.name }}
+        </a></span> &nbsp;
+        {% endfor %}
+    </p>
+</div>

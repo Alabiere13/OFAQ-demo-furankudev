@@ -1,0 +1,23 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    <h2 class="h3">Nous rejoindre</h2>
+    
+    <div class="h5 card border-info ml-auto mr-auto mb-3 text-center">
+        <div class="card-header">Déjà un compte utilisateur sur o'FAQ ?</div>
+        <img class="w-100" src="https://cdn.pixabay.com/photo/2017/01/04/12/01/space-1951858_960_720.png" alt="go">
+        <div class="card-body">
+            <a href ="{{ path('app_login')}}" class="card-title">Se connecter</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h2>Inscription</h2>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">S'enregistrer en tant que nouvel utilisateur</button>
+    {{ form_end(form) }}
+{% endblock %}

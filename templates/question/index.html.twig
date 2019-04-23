@@ -1,0 +1,29 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    {% include 'question/_sidebar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    {% if search %}
+        <h2 class="h2">Les questions et réponses relatives à la recherche "{{ search }}"</h2>
+    {% else %} 
+        <h2 class="h2">Les dernières questions de nos utilisateurs</h2>
+    {% endif %}
+    
+    <div id="accordion">
+        {% for question in questions %}
+            {% include 'question/_questions_accordion.html.twig' %}
+        {% else %}
+            <p class="text-center lead h3">Aucune question ne correspond à la recherche</p>
+            <p class="lead text-center mt-2">
+                <a class="btn btn-primary btn-lg " href="{{ path('question_index')}}" role="button">Retour à la liste complète des questions</a>
+            </p>
+        {% endfor %}
+    </div>
+
+    {% include 'question/_pagination.html.twig' %}
+
+{% endblock %}

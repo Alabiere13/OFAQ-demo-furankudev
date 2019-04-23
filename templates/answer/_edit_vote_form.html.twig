@@ -1,0 +1,10 @@
+<form class="d-inline" action='{{ path('answer_toggleVote', {id: answer.id }) }}' method="POST">
+  <fieldset class="d-inline">
+    <input class="d-inline" type="hidden" name="_method" value="PATCH">
+      {% if not user_vote_for_answer %}
+        <button type="submit" class="btn btn-info d-inline"><i class="fas fa-heart"></i></i>&nbsp;Donner son vote</button>
+      {% else %}
+        <button type="submit" class="btn btn-warning d-inline"><i class="fas fa-heart-broken"></i>&nbsp;Retirer son vote</button>
+      {% endif %}
+  </fieldset>
+</form>

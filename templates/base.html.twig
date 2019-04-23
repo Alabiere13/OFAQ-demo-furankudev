@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}o'Foire aux Questions{% endblock %}</title>
+        {# BOOTSTRAP CSS #}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {# FONTAWESOME #}
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        {# THEME #}
+        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
+        {# CUSTOM CSS #}
+        <link href="{{ asset('css/custom.css') }}" type="text/css" rel="stylesheet" />
+        {% block stylesheets %}{% endblock %}
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                {% block header %}
+                    {% include 'partial/_nav.html.twig' %}
+                {% endblock %}
+            </header>
+            <main>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="h2 text-center ml-auto mr-auto mb-3 mt-3 w-75 alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                
+                {% block main %}
+                {% endblock %}
+            </main>
+            <footer>
+                {% block footer %}
+                    <div class="row">
+                        <p class="w-100 p-3 text-center text-italic">o'FAQ by Franck Tanuki @2019</p>
+                    </div>
+                {% endblock %}
+            </footer>
+        </div>
+        {# BOOTSTRAP JS #}
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
